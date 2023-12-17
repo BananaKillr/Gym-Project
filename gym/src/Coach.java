@@ -10,8 +10,9 @@ public class Coach extends Person implements Serializable {
     private int maxWorkingHoursPerDay;
     private List<Customer> customers;
 
-    public Coach(int id, String name, char gender, String address, String phoneNumber, String email, String password, int maxWorkingHoursPerDay) {
+    public Coach(int id, String name, char gender, String address, String phoneNumber, String email, int maxWorkingHoursPerDay, char[] password) {
         super(id, name, gender, address, phoneNumber, email, password);
+        this.maxWorkingHoursPerDay = maxWorkingHoursPerDay;
     }
 
     public int getMaxWorkingHoursPerDay() {

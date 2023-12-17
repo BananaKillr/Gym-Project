@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.time.LocalDate;
@@ -9,21 +10,21 @@ public class Gym implements Serializable {
     private static final long serialVersionUID = 1L;
     static Gym gym;
     // Attributes
-    final private String name;
-    final private String address;
-    final private String phoneNumber;
+    private String name;
+    private String address;
+    private String phoneNumber;
     protected List<Equipment> sportsEquipments = new ArrayList<>();
     protected List<Coach> coaches = new ArrayList<>(); // Initialize the list
     protected List<Customer> customers = new ArrayList<>();
     protected List<Subscription> subscriptions = new ArrayList<>();
-    private final String ADMIN_NAME = "admin";
-    private final String ADMIN_PASSWORD = "123";
+    private static final String ADMIN_NAME = "admin";
+    private static final char[] ADMIN_PASSWORD = {'a','d','m','i','n'};
+    Person currentPerson;
 
-    private Gym(String name, String address, String phoneNumber) {//Private to allow for singleton
+    public Gym(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        //gym = new Gym("FitZone", "123 Main St", "555-1234");
     }
 
     public static Gym getGym() {//
@@ -38,6 +39,9 @@ public class Gym implements Serializable {
         return Gym.gym;
     }
 
+    public static void setGym(Gym gym) {//TODO remove for final production
+        Gym.gym = gym;
+    }
 
     public String getName() {
         return name;
@@ -256,8 +260,34 @@ public class Gym implements Serializable {
             e.printStackTrace();
         }
     }
-}
 
+    public boolean AdminLogin(String username, char[] password){
+        if (username.equals(Gym.ADMIN_NAME) && Arrays.equals(password, Gym.ADMIN_PASSWORD)) return true;
+        return false;
+    }
+
+    public boolean CustomerLogin(String email, char[] password){
+        for (Customer customer : customers){
+            String customerEmail = customer.getEmail();
+            char[] customerPassword = customer.getPassword();
+            if (customerEmail.equals(email) && Arrays.equals(customerPassword, password)){
+                currentPerson = customer;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean CoachLogin(String email, char[] password){
+        for (Coach coach : coaches){
+            if (coach.getEmail().equals(email) && Arrays.equals(coach.getPassword(), password)){
+                currentPerson = coach;
+                return true;
+            }
+        }
+        return false;
+    }
+}
 class SortByCustomers implements Comparator<Coach>  {
     @Override
     public int compare(Coach o1, Coach o2) {

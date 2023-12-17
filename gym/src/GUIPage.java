@@ -14,6 +14,7 @@ public class GUIPage extends JFrame implements ActionListener {
     Person currentUser;
     Coach currentCoach;
     Customer currentCustomer;
+    String userType;
     JPanel topPanel = new JPanel();
     JPanel sidebar = new JPanel();
     JPanel mainArea = new JPanel();
@@ -49,30 +50,27 @@ public class GUIPage extends JFrame implements ActionListener {
 
         //Settings for panels and layout
 
-//        topPanel.setPreferredSize(new Dimension(1000,100));
-//        topPanel.setLayout(new GridLayout(3,2));
-//        topPanel.setBorder(blackLine);
-//        this.add(topPanel, BorderLayout.NORTH);
+        topPanel.setPreferredSize(new Dimension(1000,100));
+        topPanel.setLayout(new GridLayout(3,2));
+        topPanel.setBorder(blackLine);
+        this.add(topPanel, BorderLayout.NORTH);
 
-//        sidebar.setPreferredSize(new Dimension(200,900));
-//        sidebar.setBorder(blackLine);
-//        sidebar.setLayout(new GridLayout(14,1));
-//        this.add(sidebar, BorderLayout.WEST);
+        sidebar.setPreferredSize(new Dimension(200,900));
+        sidebar.setBorder(blackLine);
+        sidebar.setLayout(new GridLayout(14,1));
+        this.add(sidebar, BorderLayout.WEST);
 
-//        mainArea.setBorder(blackLine);
-//        mainArea.setLayout(new GridLayout(12,4));
-//        this.add(mainArea);
+        mainArea.setBorder(blackLine);
+        mainArea.setLayout(new GridLayout(12,4));
+        this.add(mainArea);
 
+        mainTextArea.setFont(font);
+        mainTextArea.setEditable(false);
+        scrollableArea = new JScrollPane(mainTextArea);
+        scrollableArea.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollableArea.setPreferredSize(new Dimension(1000, 200));
+        this.getContentPane().add(scrollableArea, BorderLayout.SOUTH);
 
-
-//        mainTextArea.setFont(font);
-//        mainTextArea.setEditable(false);
-//        scrollableArea = new JScrollPane(mainTextArea);
-//        scrollableArea.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//        scrollableArea.setPreferredSize(new Dimension(1000, 200));
-//        this.getContentPane().add(scrollableArea, BorderLayout.SOUTH);
-
-        LoginPage();
     }// Constructor with GUI Settings & Layout
 
     public void actionPerformed(ActionEvent e){
@@ -132,30 +130,45 @@ public class GUIPage extends JFrame implements ActionListener {
     }
 
     public void LoginPage(){
-        mainArea.setBorder(blackLine);
-        mainArea.setLayout(new GridLayout(12,4));
-        this.add(mainArea);
-
-
-        JButton customerLogin = new JButton("Customer Login");
-        JButton coachLogin = new JButton("Coach Login");
-        JButton adminLogin = new JButton("Admin Login");
-        JButton customerRegister = new JButton("Customer Register");
-        JButton coachRegister = new JButton("Coach Register");
-
-
+        JTextField UserName = new JTextField(20);
+        JButton loginButton = new JButton("Continue");
+        String[] selection = {"Employee", "Customer"};
+        JComboBox Jselection = new JComboBox(selection);
 
         ResetPanels();
 
+        //Creating Login Panel
+        topPanel.add(new JLabel("Enter ID:", SwingConstants.RIGHT));
+        topPanel.add(UserName);
+        topPanel.add(new JLabel());
+        topPanel.add(Jselection);
+        topPanel.add(new JLabel());
+        topPanel.add(loginButton);
+
+        userType = "Employee";
+        Jselection.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                userType = Jselection.getSelectedItem().toString();
+            }
+        });
+
+        loginButton.addActionListener(new ActionListener() { //Button passes text from field to LoginFunction
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = UserName.getText();
+                LoginFunction(username, userType);
+            }
+        });
     }// Default page
 
     public void LoggedInPage(){
         ResetPanels();
-        String userName = currentUser.getName();
-        JButton logoutButton = new JButton("Enter New ID");
+        //String userName = currentUser.getName();
+        JButton logoutButton = new JButton("Logout");
 
-        topPanel.add(new JLabel("Welcome, ", SwingConstants.RIGHT));
-        topPanel.add(new JLabel(userName));
+        topPanel.add(new JLabel("Welcome", SwingConstants.RIGHT));
+        //topPanel.add(new JLabel(userName));
         topPanel.add(new JLabel());
         topPanel.add(new JLabel());
         topPanel.add(new JLabel());
@@ -164,8 +177,9 @@ public class GUIPage extends JFrame implements ActionListener {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoginPage();
-                currentUser = null;
+                GUI.main(new String[]{});
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(sidebar);
+                frame.dispose();
             }
         });
     }// User's name + logout button
@@ -179,25 +193,26 @@ public class GUIPage extends JFrame implements ActionListener {
 
     public void AdminPage() {//TODO FINISH ADMIN
             ResetPanels();
+            LoggedInPage();
 
-            ResetPanels();
-            String userName = "Admin";
-            JButton logoutButton = new JButton("Enter New ID");
-
-            topPanel.add(new JLabel("Welcome, ", SwingConstants.RIGHT));
-            topPanel.add(new JLabel(userName));
-            topPanel.add(new JLabel());
-            topPanel.add(new JLabel());
-            topPanel.add(new JLabel());
-            topPanel.add(logoutButton);
-
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LoginPage();
-                currentUser = null;
-            }
-        });
+//            ResetPanels();
+//            String userName = "Admin";
+//            JButton logoutButton = new JButton("Enter New ID");
+//
+//            topPanel.add(new JLabel("Welcome, ", SwingConstants.RIGHT));
+//            topPanel.add(new JLabel(userName));
+//            topPanel.add(new JLabel());
+//            topPanel.add(new JLabel());
+//            topPanel.add(new JLabel());
+//            topPanel.add(logoutButton);
+//
+//        logoutButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                LoginPage();
+//                currentUser = null;
+//            }
+//        });
 
         JButton addCoach = new JButton("Add Coach");
         JButton deleteCoach = new JButton("Delete Coaches");
@@ -745,8 +760,8 @@ public class GUIPage extends JFrame implements ActionListener {
     }
 
     public void CustomerPage(){
+        ResetPanels();
         LoggedInPage();
-
         JButton coachInfo = new JButton("My Coach");
         JButton gymEquipment = new JButton("Gym Equipment");
         JButton membershipPlan = new JButton("Membership");

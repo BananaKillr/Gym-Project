@@ -12,16 +12,21 @@ public abstract class Person implements Serializable {
     private String phoneNumber;
 
     private String email;
-    private String password;
+    private char[] password;
 
     public Person(int id, String name, char gender, String address,
-                  String phoneNumber, String email, String password) {
+                  String phoneNumber, String email, char[] password) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.password = password;
+    }
+
+    protected char[] getPassword() {
+        return password;
     }
 
     public int getId() {

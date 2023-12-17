@@ -15,10 +15,9 @@ public class Customer extends Person implements Serializable {
 
     // Constructor
 
-    public Customer(int id, String name, char gender, String address, String phoneNumber, String email, String password) {
+    public Customer(int id, String name, char gender, String address, String phoneNumber, String email, char[] password) {
         super(id, name, gender, address, phoneNumber, email, password);
     }
-
     //getters and setters
     public Subscription getSubscription() {
         return subscription;
