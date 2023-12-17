@@ -14,12 +14,18 @@ public class Gym implements Serializable {
     private String address;
     private String phoneNumber;
     protected List<Equipment> sportsEquipments = new ArrayList<>();
-    protected List<Coach> coaches = new ArrayList<>(); // Initialize the list
+    protected List<Coach> coaches = new ArrayList<>();
     protected List<Customer> customers = new ArrayList<>();
     protected List<Subscription> subscriptions = new ArrayList<>();
     private static final String ADMIN_NAME = "admin";
     private static final char[] ADMIN_PASSWORD = {'a','d','m','i','n'};
     Person currentPerson;
+    static int customerIDCounter;
+    static int coachIDCounter;
+
+    public Gym(){
+
+    }
 
     public Gym(String name, String address, String phoneNumber) {
         this.name = name;
@@ -27,19 +33,7 @@ public class Gym implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public static Gym getGym() {//
-        if (Gym.gym == null) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data.ser"))) {
-                gym = (Gym) ois.readObject();
-                System.out.println("Deserialization complete.");
-            } catch (Exception e) {
-                System.out.println("Error");
-            }
-        }
-        return Gym.gym;
-    }
-
-    public static void setGym(Gym gym) {//TODO remove for final production
+    public static void setGym(Gym gym){
         Gym.gym = gym;
     }
 
@@ -211,7 +205,9 @@ public class Gym implements Serializable {
     }
 
     public String SortCoachesByCustomers(List<Coach> coaches) {
-        List<Coach> sortedList = coaches;
+        //Making a copy of coaches
+        List<Coach> sortedList = new ArrayList<Coach>(coaches.size());
+        sortedList.addAll(coaches);
         sortedList.sort(new SortByCustomers());
         String returnString = "";
 
@@ -252,13 +248,22 @@ public class Gym implements Serializable {
         }
     }
 
-    public static void saveData() {
+    public static void saveData() { //Saves data to file called data.ser
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.ser"))) {
             oos.writeObject(gym);
             System.out.println("Serialization complete.");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static Gym getDataFromFile(){ //puts data in the static Gym object, then returns the handle
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data.ser"))) {
+            Gym.gym = (Gym) ois.readObject();
+            System.out.println("Deserialization complete.");
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+        return gym;
     }
 
     public boolean AdminLogin(String username, char[] password){
@@ -287,26 +292,13 @@ public class Gym implements Serializable {
         }
         return false;
     }
-}
-class SortByCustomers implements Comparator<Coach>  {
-    @Override
-    public int compare(Coach o1, Coach o2) {
-        int o1Size, o2Size;
 
-        if (o1.getCustomers() == null) {
-            o1Size = 0;
-        } else {
-            o1Size = o1.getCustomers().size();
+    public String getEquipmentList(){
+        String result = "";
+        for (Equipment equipment : sportsEquipments){
+            result += "Name: " + equipment.getEquipmentName() + "\t Amount: " + equipment.getQuantity() + "\n";
         }
-
-        if (o2.getCustomers() == null) {
-            o2Size = 0;
-        } else {
-            o2Size = o2.getCustomers().size();
-        }
-
-        if (o1Size > o2Size) return 1;
-        else if (o1Size < o2Size) return -1;
-        else return 0;
+        return result;
     }
+
 }

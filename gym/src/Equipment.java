@@ -12,7 +12,7 @@ public class Equipment implements Serializable {
 
     //constructor
     public Equipment(String equipmentName, int equipmentCode,
-                     int quantity, String equipmentPhoto) {
+                     int quantity) {
         this.equipmentName = equipmentName;
         this.equipmentCode = equipmentCode;
         this.quantity = quantity;

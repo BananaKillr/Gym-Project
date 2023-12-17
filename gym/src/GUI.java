@@ -6,7 +6,7 @@ public class GUI {
     private JPanel ParentPanel;
     private JPanel MainPage;
     private JButton coachLoginButton;
-    private JButton coachRegistrationButton;
+    private JButton coachRegistrationButton; //TODO Add registration for coach & customer
     private JButton adminLoginButton;
     private JButton customerRegistrationButton;
     private JButton customerLoginButton;
@@ -93,7 +93,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String username = adminUsernameField.getText();
                 char[] password = adminPasswordField.getPassword();
-                if (Gym.getGym().AdminLogin(username, password)) {
+                if (Gym.gym.AdminLogin(username, password)) {
                     JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(ParentPanel);
                     mainFrame.setVisible(false);
                     GUIPage gui = new GUIPage();
@@ -108,7 +108,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String email = customerUsernameField.getText();
                 char[] password = customerPasswordField.getPassword();
-                if (Gym.getGym().CustomerLogin(email, password)) {
+                if (Gym.gym.CustomerLogin(email, password)) {
                     JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(ParentPanel);
                     mainFrame.setVisible(false);
                     GUIPage gui = new GUIPage();
@@ -123,7 +123,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String email = coachLoginField.getText();
                 char[] password = coachLoginPassword.getPassword();
-                if (Gym.getGym().CoachLogin(email, password)) {
+                if (Gym.gym.CoachLogin(email, password)) {
                     JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(ParentPanel);
                     mainFrame.dispose();
                     GUIPage gui = new GUIPage();
@@ -143,7 +143,13 @@ public class GUI {
         frame.pack();
         frame.setVisible(true);
 
-        //Reading Files
-        Gym gym = Gym.getGym();
+        //Creating an example gym
+        Gym.getDataFromFile();
+        Gym gym = Gym.gym;
+
+        //For testing
+//        gym.currentPerson = gym.customers.get(0);
+//        GUIPage guiPage = new GUIPage();
+//        guiPage.CustomerPage();
     }
 }

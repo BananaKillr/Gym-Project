@@ -1,6 +1,7 @@
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Coach extends Person implements Serializable {
@@ -41,16 +42,19 @@ public class Coach extends Person implements Serializable {
         }
     }
 
-    public void showCustomerList() {
-        System.out.println("List of Coach's Customers:");
+    public String showCustomerList() {
+        String result = "";
+        result += ("List of Coach's Customers:");
         for (Customer customer : customers) {
-            System.out.println("Customer ID: " + customer.getId() +
-                    ", Name: " + customer.getName());
+            result += ("\nCustomer ID: " + customer.getId() +
+                    ", Name: " + customer.getName() + ", Number: " + customer.getPhoneNumber());
         }
+        return result;
     }
 
-    public void getInBodyHistory(int customerId) {
+    public String getInBodyHistory(int customerId) {
         List<InBody> inBodyList = null;
+        String result = "";
 
         for (Customer customer : customers) {
             if (customer.getId() == customerId) {
@@ -60,50 +64,59 @@ public class Coach extends Person implements Serializable {
         }
 
         if (inBodyList != null) {
-            System.out.println("InBody History for Customer ID " + customerId + ":");
+            result += "InBody History for Customer ID " + customerId + ":\n";
+
             for (int i = 0; i < inBodyList.size(); i++) {
                 InBody inBody = inBodyList.get(i);
-                System.out.println("Date: " + inBody.getDateOfInBody());
-                System.out.println("Height: " + inBody.getHeight());
-                System.out.println("Total Weight: " + inBody.getTotalWeight());
-                System.out.println("Body Fat Mass: " + inBody.getBodyFatMass());
-                System.out.println("Minerals: " + inBody.getMinerals());
-                System.out.println("Total Body Water: " + inBody.getTotalBodyWater());
-                System.out.println("Protein: " + inBody.getProtein());
-                System.out.println("---------------------");
+                result += "Date: " + inBody.getDateOfInBody() + "\n";
+                result += "Height: " + inBody.getHeight() + "\n";
+                result += "Total Weight: " + inBody.getTotalWeight() + "\n";
+                result += "Body Fat Mass: " + inBody.getBodyFatMass() + "\n";
+                result += "Minerals: " + inBody.getMinerals() + "\n";
+                result += "Total Body Water: " + inBody.getTotalBodyWater() + "\n";
+                result += "Protein: " + inBody.getProtein() + "\n";
+                result += "---------------------\n";
             }
         } else {
-            System.out.println("No InBody history found for Customer ID " + customerId);
+            result += "No InBody history found for Customer ID " + customerId;
         }
-    }
 
-    public Customer getCustomerDetailsByName(String customerName) {
+        return result;
+    }
+    public String getCustomerDetailsByName(String customerName) {
+        String result = "Customers with name " + customerName;
+        ArrayList<Customer> customersWithName = new ArrayList<>();
         for (Customer customer : customers) {
             if (customer.getName().equalsIgnoreCase(customerName)) {
-                return customer;
+                customersWithName.add(customer);
             }
         }
-        return null;
+        for (Customer customer : customersWithName){
+            result += ("\nCustomer ID: " + customer.getId() + ", Name: " + customer.getName());
+        }
+        return result;
     }
 
-    public void showFemaleCustomers() {
-        System.out.println("List of Female Customers:");
+    public String showFemaleCustomers() {
+        String result = "";
+        result += ("List of Female Customers:");
         for (Customer customer : customers) {
             if (customer.getGender() == 'F') {
-                System.out.println("Customer ID: " + customer.getId() + ", Name: " + customer.getName());
+                result += ("\nCustomer ID: " + customer.getId() + ", Name: " + customer.getName());
             }
         }
+        return result;
     }
 
-    public void showMaleCustomers() {
-        System.out.println("List of Male Customers:");
+    public String showMaleCustomers() {
+        String result = "";
+        result += ("List of Male Customers:");
         for (Customer customer : customers) {
             if (customer.getGender() == 'M') {
-                System.out.println("Customer ID: " + customer.getId() + ", Name: " + customer.getName());
+                result += ("\nCustomer ID: " + customer.getId() + ", Name: " + customer.getName());
             }
         }
+        return result;
     }
-
-
 
 }

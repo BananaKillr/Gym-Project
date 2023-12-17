@@ -13,6 +13,9 @@ public abstract class Person implements Serializable {
 
     private String email;
     private char[] password;
+    protected char[] getPassword() {
+        return password;
+    }
 
     public Person(int id, String name, char gender, String address,
                   String phoneNumber, String email, char[] password) {
@@ -24,11 +27,6 @@ public abstract class Person implements Serializable {
         this.email = email;
         this.password = password;
     }
-
-    protected char[] getPassword() {
-        return password;
-    }
-
     public int getId() {
         return id;
     }

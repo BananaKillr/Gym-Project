@@ -11,9 +11,6 @@ public class GUIPage extends JFrame implements ActionListener {
 
     Gym gym;
     Border blackLine = BorderFactory.createLineBorder(Color.black);
-    Person currentUser;
-    Coach currentCoach;
-    Customer currentCustomer;
     String userType;
     JPanel topPanel = new JPanel();
     JPanel sidebar = new JPanel();
@@ -26,7 +23,7 @@ public class GUIPage extends JFrame implements ActionListener {
     List<Coach> listOfCoaches;
 
     public GUIPage(){
-        this.gym = Gym.getGym();
+        this.gym = Gym.gym;
         this.listOfCoaches = gym.coaches;
 
         //Settings for Frame
@@ -194,25 +191,6 @@ public class GUIPage extends JFrame implements ActionListener {
     public void AdminPage() {//TODO FINISH ADMIN
             ResetPanels();
             LoggedInPage();
-
-//            ResetPanels();
-//            String userName = "Admin";
-//            JButton logoutButton = new JButton("Enter New ID");
-//
-//            topPanel.add(new JLabel("Welcome, ", SwingConstants.RIGHT));
-//            topPanel.add(new JLabel(userName));
-//            topPanel.add(new JLabel());
-//            topPanel.add(new JLabel());
-//            topPanel.add(new JLabel());
-//            topPanel.add(logoutButton);
-//
-//        logoutButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                LoginPage();
-//                currentUser = null;
-//            }
-//        });
 
         JButton addCoach = new JButton("Add Coach");
         JButton deleteCoach = new JButton("Delete Coaches");
@@ -780,16 +758,11 @@ public class GUIPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ResetTextArea();
-                int customerCoach = currentCustomer.getCoachID();
-                for (Coach coach : listOfCoaches) {
-                    if (coach.getId()==customerCoach)
-                    {
-                        textAreaOutput += "Coach Name: " + coach.getName() +
-                                "\n Phone Number: " + coach.getPhoneNumber()+
-                                "\n Working Hours: " + coach.getMaxWorkingHoursPerDay();
-                        break;
-                    }
-                }
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                textAreaOutput = ((Customer)gym.currentPerson).getCoachInfo();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -798,9 +771,11 @@ public class GUIPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ResetTextArea();
-                for (Equipment a : gym.getSportsEquipments()){
-                    textAreaOutput += "Name: " + a.getEquipmentName() + "\t Amount: " + a.getQuantity() + "\n";
-                }
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                textAreaOutput = Gym.gym.getEquipmentList();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -809,9 +784,11 @@ public class GUIPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ResetTextArea();
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
 
-                textAreaOutput = currentCustomer.displayMembershipDetails(1);
-
+                textAreaOutput = ((Customer)gym.currentPerson).displayMembershipDetails();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -859,12 +836,12 @@ public class GUIPage extends JFrame implements ActionListener {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                         LocalDate date = LocalDate.parse(dateString, formatter);
 
-                        textAreaOutput = currentCustomer.displayInBodyInfoAtDate(LocalDate.now(),1);
+                        textAreaOutput = ((Customer)gym.currentPerson).displayInBodyInfoAtDate(LocalDate.now());
                         mainTextArea.setText(textAreaOutput);
                     }
                 });
 
-                //List<InBody> tempInBody = currentCustomer.getInBodyInfo();
+                //List<InBody> tempInBody = ((Customer)gym.currentPerson).getInBodyInfo();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -877,7 +854,7 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.revalidate();
                 mainArea.repaint();
 
-                textAreaOutput = currentCustomer.displayWeightLossGoal(1);
+                textAreaOutput = ((Customer)gym.currentPerson).displayWeightLossGoal();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -885,10 +862,60 @@ public class GUIPage extends JFrame implements ActionListener {
         addInBody.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JButton getInput = new JButton("Add In Body");
+                JTextField height = new JTextField();
+                JTextField weight = new JTextField();
+                JTextField bodyFat = new JTextField();
+                JTextField minerals = new JTextField();
+                JTextField water = new JTextField();
+                JTextField protein = new JTextField();
+
+                ResetTextArea();
                 ResetMainArea();
 
+                AddPanelsToMain(1);
+                mainArea.add(new JLabel("Height (cm):"));
+                mainArea.add(height);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Weight (KG): "));
+                mainArea.add(weight);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Body Fat Mass (KG)"));
+                mainArea.add(bodyFat);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Minerals (KG)"));
+                mainArea.add(minerals);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Total Body Water (KG)"));
+                mainArea.add(water);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Protein (KG)"));
+                mainArea.add(protein);
+                AddPanelsToMain(2);
+                mainArea.add(getInput);
+                AddPanelsToMain(2+5*4);
+
+                mainArea.repaint();
                 mainArea.revalidate();
-                repaint();
+
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        LocalDate today = LocalDate.now();
+                        try{
+                            InBody inBody = new InBody(today,
+                                    Double.parseDouble(height.getText()), Double.parseDouble(weight.getText()),
+                                    Double.parseDouble(bodyFat.getText()), Double.parseDouble(minerals.getText()),
+                                    Double.parseDouble(water.getText()), Double.parseDouble(protein.getText()));
+                            ((Customer)Gym.gym.currentPerson).addInBody(inBody);
+                            textAreaOutput = "InBody added successfully";
+                        }
+                        catch (Exception a){
+                            textAreaOutput = "Invalid InBody";
+                        }
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
             }
         });
 
@@ -902,31 +929,25 @@ public class GUIPage extends JFrame implements ActionListener {
         JButton myMaleCustomers = new JButton("My Male Customers");
         JButton myFemaleCustomers = new JButton("My Female Customers");
         JButton myCustomersInBody = new JButton("Customer In-Bodies");
-        JButton allCustomers = new JButton("All Customers");
+        JButton allCustomers = new JButton("Customer Info By Name");
 
         sidebar.add(myCustomers);
         sidebar.add(myMaleCustomers);
         sidebar.add(myFemaleCustomers);
         sidebar.add(allCustomers);
-        //sidebar.add(myCustomersInBody);
+        sidebar.add(myCustomersInBody);
         sidebar.add(new JLabel());
         sidebar.add(new JLabel());
-
         myCustomers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ResetTextArea();
-                try {
-                    for (Customer customer : currentCoach.getCustomers()) {
-                        textAreaOutput += "Customer ID: " + customer.getId() + ", Name: " + customer.getName() + "\n";
-                    }
-                }
-                catch (NullPointerException exception){
-                    textAreaOutput = "No Customers";
-                }
-                if (textAreaOutput.equals("")) textAreaOutput = "No Customers";
-                mainTextArea.setText(textAreaOutput);
+                ResetTextArea();
+                mainArea.repaint();
+                mainArea.revalidate();
 
+                textAreaOutput = ((Coach)Gym.gym.currentPerson).showCustomerList();
+                mainTextArea.setText(textAreaOutput);
             }
         });
 
@@ -934,16 +955,10 @@ public class GUIPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ResetTextArea();
-
-                try{
-                    for (Customer customer : currentCoach.getCustomers()) {
-                        if (customer.getGender() == 'M')
-                            textAreaOutput += "Customer ID: " + customer.getId() + ", Name: " + customer.getName() + "\n";
-                    }}
-                catch (NullPointerException exception){
-                    textAreaOutput = "No Customers";;;
-                }
-                if (textAreaOutput.equals("")) textAreaOutput = "No Customers";
+                ResetTextArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+                textAreaOutput = ((Coach)Gym.gym.currentPerson).showMaleCustomers();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -952,13 +967,11 @@ public class GUIPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ResetTextArea();
-                try{
-                for (Customer customer : currentCoach.getCustomers()){
-                    if(customer.getGender() == 'F') textAreaOutput += "Customer ID: " + customer.getId() + ", Name: " + customer.getName() + "\n";
-                }}
-                catch (NullPointerException exception){
-                    textAreaOutput = "No Customers";}
-                if (textAreaOutput.equals("")) textAreaOutput = "No Customers";
+                ResetTextArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                textAreaOutput = ((Coach)Gym.gym.currentPerson).showFemaleCustomers();
                 mainTextArea.setText(textAreaOutput);
             }
         });
@@ -966,12 +979,56 @@ public class GUIPage extends JFrame implements ActionListener {
         allCustomers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                for (Customer customer : listOfCustomers){
-                    textAreaOutput += "Customer ID: " + customer.getId() + ", Name: " + customer.getName() + "\n";
-                }
-                if (textAreaOutput.equals("")) textAreaOutput = "No Customers";
-                mainTextArea.setText(textAreaOutput);
+                ResetMainArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                JButton getInput = new JButton("Get Customer Details");
+                JTextField customerName = new JTextField();
+
+                AddPanelsToMain(1);
+                mainArea.add(getInput);
+                mainArea.add(customerName);
+                AddPanelsToMain(1+11*4);
+
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ResetTextArea();
+
+                        String name = customerName.getText();
+                        textAreaOutput = ((Coach)Gym.gym.currentPerson).getCustomerDetailsByName(name);
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
+            }
+        });
+
+        myCustomersInBody.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetMainArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                JButton getInput = new JButton("Get InBody");
+                JTextField customerID = new JTextField();
+
+                AddPanelsToMain(1);
+                mainArea.add(getInput);
+                mainArea.add(customerID);
+                AddPanelsToMain(1+11*4);
+
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ResetTextArea();
+
+                        int ID = Integer.parseInt(customerID.getText());
+                        textAreaOutput = ((Coach)Gym.gym.currentPerson).getInBodyHistory(ID);
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
             }
         });
     }
