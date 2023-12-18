@@ -31,55 +31,34 @@ public class InBody implements Serializable {
         return dateOfInBody;
     }
 
-    public void setDateOfInBody(LocalDate dateOfInBody) {
-        this.dateOfInBody = dateOfInBody;
-    }
 
     public double getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
 
     public double getTotalWeight() {
         return totalWeight;
     }
 
-    public void setTotalWeight(double totalWeight) {
-        this.totalWeight = totalWeight;
-    }
 
     public double getBodyFatMass() {
         return bodyFatMass;
     }
 
-    public void setBodyFatMass(double bodyFatMass) {
-        this.bodyFatMass = bodyFatMass;
-    }
 
     public double getMinerals() {
         return minerals;
     }
 
-    public void setMinerals(double minerals) {
-        this.minerals = minerals;
-    }
 
     public double getTotalBodyWater() {
         return totalBodyWater;
     }
 
-    public void setTotalBodyWater(double totalBodyWater) {
-        this.totalBodyWater = totalBodyWater;
-    }
 
     public double getProtein() {
         return protein;
     }
 
-    public void setProtein(double protein) {
-        this.protein = protein;
-    }
 }

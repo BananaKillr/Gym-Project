@@ -91,6 +91,7 @@ public class Gym implements Serializable {
             System.out.println("Saving error");;
         }
     }
+
     public static Gym getDataFromFile(String fileName){ //puts data in the static Gym object, then returns the handle
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
             Gym.gym = (Gym) ois.readObject();

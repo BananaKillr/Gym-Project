@@ -22,29 +22,14 @@ public class Subscription implements Serializable {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
 
     public int getAssignedCoachId() {
         return assignedCoachId;
     }
 
-    public void setAssignedCoachId(int assignedCoachId) {
-        this.assignedCoachId = assignedCoachId;
-    }
 
     public MembershipPlan getMembershipPlan() {
         return membershipPlan;
     }
 
-    public void setMembershipPlan(MembershipPlan membershipPlan) {
-        this.membershipPlan = membershipPlan;
-    }
-
-    public boolean equals(Subscription sub1, Subscription sub2){
-        return sub1.assignedCoachId == sub2.assignedCoachId &&
-                sub1.membershipPlan.equals(sub2.membershipPlan) &&
-                sub1.customerId == sub2.customerId;
-    }
 }

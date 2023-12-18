@@ -130,9 +130,319 @@ public class GUIPage extends JFrame implements ActionListener {
         });
     }// User's name + logout button
 
+    public void CustomerPage(){
+        ResetPanels();
+        LoggedInPage();
+        JButton coachInfo = new JButton("My Coach");
+        JButton gymEquipment = new JButton("Gym Equipment");
+        JButton membershipPlan = new JButton("Membership");
+        JButton inBody = new JButton("In Bodies");
+        JButton calculator = new JButton("Calculator");
+        JButton addInBody = new JButton("Add In Body");
+        JButton deleteInBody = new JButton("Delete In Body");
+
+        sidebar.add(coachInfo);
+        sidebar.add(gymEquipment);
+        sidebar.add(membershipPlan);
+        sidebar.add(inBody);
+        sidebar.add(calculator);
+        sidebar.add(addInBody);
+        sidebar.add(deleteInBody);
+
+        coachInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                textAreaOutput = ((Customer)Gym.gym.currentPerson).getCoachInfo();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        gymEquipment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                textAreaOutput = Gym.gym.getEquipmentList();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        membershipPlan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                textAreaOutput = ((Customer)Gym.gym.currentPerson).displayMembershipDetails();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        inBody.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetMainArea();
+
+                JTextField yearInput = new JTextField();
+                JTextField monthInput = new JTextField();
+                JTextField dayInput = new JTextField();
+                JButton calculate = new JButton("Get In Body");
+
+
+                AddPanelsToMain(1);
+                mainArea.add(new JLabel("Year: "));
+                mainArea.add(yearInput);
+                AddPanelsToMain(1);
+
+                AddPanelsToMain(1);
+                mainArea.add(new JLabel("Month: "));
+                mainArea.add(monthInput);
+                AddPanelsToMain(1);
+
+                AddPanelsToMain(1);
+                mainArea.add(new JLabel("Day: "));
+                mainArea.add(dayInput);
+                AddPanelsToMain(1);
+
+                mainArea.add(calculate);
+                AddPanelsToMain(4*9-1);
+
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                calculate.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String year = yearInput.getText();
+                        String month = monthInput.getText();
+                        String day = dayInput.getText();
+                        try {
+                            String dateString = day + "/" + month + "/" + year;
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            LocalDate date = LocalDate.parse(dateString, formatter);
+                            textAreaOutput = ((Customer)Gym.gym.currentPerson).displayInBodyInfoAtDate(date);
+                        } catch (DateTimeParseException exception){
+                            textAreaOutput = "Invalid Date";
+                        }
+
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
+
+                //List<InBody> tempInBody = ((Customer)gym.currentPerson).getInBodyInfo();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        calculator.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetMainArea();
+                mainArea.revalidate();
+                mainArea.repaint();
+
+                textAreaOutput = ((Customer)Gym.gym.currentPerson).displayWeightLossGoal();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        addInBody.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton getInput = new JButton("Add In Body");
+                JTextField height = new JTextField();
+                JTextField weight = new JTextField();
+                JTextField bodyFat = new JTextField();
+                JTextField minerals = new JTextField();
+                JTextField water = new JTextField();
+                JTextField protein = new JTextField();
+
+                ResetTextArea();
+                ResetMainArea();
+
+                AddPanelsToMain(1);
+                mainArea.add(new JLabel("Height (cm):"));
+                mainArea.add(height);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Weight (KG): "));
+                mainArea.add(weight);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Body Fat Mass (KG)"));
+                mainArea.add(bodyFat);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Minerals (KG)"));
+                mainArea.add(minerals);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Total Body Water (KG)"));
+                mainArea.add(water);
+                AddPanelsToMain(2);
+                mainArea.add(new JLabel("Protein (KG)"));
+                mainArea.add(protein);
+                AddPanelsToMain(2);
+                mainArea.add(getInput);
+                AddPanelsToMain(2+5*4);
+
+                mainArea.repaint();
+                mainArea.revalidate();
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        LocalDate today = LocalDate.now();
+                        if (((Customer)Gym.gym.currentPerson).isAllowedToPerformInBody()){
+                            try{
+                                InBody inBody = new InBody(today,
+                                        Double.parseDouble(height.getText()), Double.parseDouble(weight.getText()),
+                                        Double.parseDouble(bodyFat.getText()), Double.parseDouble(minerals.getText()),
+                                        Double.parseDouble(water.getText()), Double.parseDouble(protein.getText()));
+                                ((Customer)Gym.gym.currentPerson).addInBody(inBody);
+                                textAreaOutput = "InBody added successfully";
+                            }
+                            catch (NumberFormatException a){
+                                textAreaOutput = "Invalid InBody";
+                            }
+                        } else textAreaOutput = "Not Allowed to Do InBody";
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
+            }
+        });
+
+        deleteInBody.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(GUIPage.this, "Are you sure you want to proceed?", "Delete", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) ((Customer)Gym.gym.currentPerson).deleteLastInBody();
+            }
+        });
+    }
+
+    public void CoachPage(){
+        ResetPanels();
+        LoggedInPage();
+
+        JButton myCustomers = new JButton("My Customers");
+        JButton myMaleCustomers = new JButton("My Male Customers");
+        JButton myFemaleCustomers = new JButton("My Female Customers");
+        JButton myCustomersInBody = new JButton("Customer In-Bodies");
+        JButton allCustomers = new JButton("Customer Info By Name");
+
+        sidebar.add(myCustomers);
+        sidebar.add(myMaleCustomers);
+        sidebar.add(myFemaleCustomers);
+        sidebar.add(allCustomers);
+        sidebar.add(myCustomersInBody);
+        sidebar.add(new JLabel());
+        sidebar.add(new JLabel());
+        myCustomers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetTextArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                textAreaOutput = ((Coach)Gym.gym.currentPerson).showCustomerList();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        myMaleCustomers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetTextArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+                textAreaOutput = ((Coach)Gym.gym.currentPerson).showMaleCustomers();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        myFemaleCustomers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                ResetTextArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                textAreaOutput = ((Coach)Gym.gym.currentPerson).showFemaleCustomers();
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        allCustomers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetMainArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                JButton getInput = new JButton("Get Customer Details");
+                JTextField customerName = new JTextField();
+
+                AddPanelsToMain(1);
+                mainArea.add(getInput);
+                mainArea.add(customerName);
+                AddPanelsToMain(1+11*4);
+
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ResetTextArea();
+
+                        String name = customerName.getText();
+                        textAreaOutput = ((Coach)Gym.gym.currentPerson).getCustomerDetailsByName(name);
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
+            }
+        });
+
+        myCustomersInBody.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetMainArea();
+                mainArea.repaint();
+                mainArea.revalidate();
+
+                JButton getInput = new JButton("Get InBody");
+                JTextField customerID = new JTextField();
+
+                AddPanelsToMain(1);
+                mainArea.add(getInput);
+                mainArea.add(customerID);
+                AddPanelsToMain(1+11*4);
+
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ResetTextArea();
+
+                        int ID = Integer.parseInt(customerID.getText());
+                        textAreaOutput = ((Coach)Gym.gym.currentPerson).getInBodyHistory(ID);
+                        mainTextArea.setText(textAreaOutput);
+                    }
+                });
+            }
+        });
+    }
+
     public void AdminPage() {
-            ResetPanels();
-            LoggedInPage();
+        ResetPanels();
+        LoggedInPage();
 
         JButton addCoach = new JButton("Add Coach");
         JButton editCoaches = new JButton("Edit Coaches");
@@ -320,13 +630,13 @@ public class GUIPage extends JFrame implements ActionListener {
                                     coachPassword.setText(password);
                                     foundCoach = true;
                                     break;
-                            }
+                                }
                             }
                             if (!foundCoach) mainTextArea.setText("No Coach Found");
                         } catch (Exception exception){
                             mainTextArea.setText("Invalid Coach ID");
                         }
-;
+                        ;
                     }
                 });
 
@@ -353,11 +663,11 @@ public class GUIPage extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Delete", JOptionPane.YES_NO_OPTION);
-                       if (input == 0){
+                        if (input == 0){
 
-                           mainTextArea.setText(Admin.deleteCoach(intCoachID[0]));
-                           ResetMainArea();
-                       }
+                            mainTextArea.setText(Admin.deleteCoach(intCoachID[0]));
+                            ResetMainArea();
+                        }
                     }
                 });
             }
@@ -916,316 +1226,6 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.repaint();
                 textAreaOutput = Admin.SortCoachesByCustomers(Gym.gym.coaches);
                 mainTextArea.setText(textAreaOutput);
-            }
-        });
-    }
-
-    public void CustomerPage(){
-        ResetPanels();
-        LoggedInPage();
-        JButton coachInfo = new JButton("My Coach");
-        JButton gymEquipment = new JButton("Gym Equipment");
-        JButton membershipPlan = new JButton("Membership");
-        JButton inBody = new JButton("In Bodies");
-        JButton calculator = new JButton("Calculator");
-        JButton addInBody = new JButton("Add In Body");
-        JButton deleteInBody = new JButton("Delete In Body");
-
-        sidebar.add(coachInfo);
-        sidebar.add(gymEquipment);
-        sidebar.add(membershipPlan);
-        sidebar.add(inBody);
-        sidebar.add(calculator);
-        sidebar.add(addInBody);
-        sidebar.add(deleteInBody);
-
-        coachInfo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetMainArea();
-                mainArea.revalidate();
-                mainArea.repaint();
-
-                textAreaOutput = ((Customer)Gym.gym.currentPerson).getCoachInfo();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        gymEquipment.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetMainArea();
-                mainArea.revalidate();
-                mainArea.repaint();
-
-                textAreaOutput = Gym.gym.getEquipmentList();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        membershipPlan.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetMainArea();
-                mainArea.revalidate();
-                mainArea.repaint();
-
-                textAreaOutput = ((Customer)Gym.gym.currentPerson).displayMembershipDetails();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        inBody.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetMainArea();
-
-                JTextField yearInput = new JTextField();
-                JTextField monthInput = new JTextField();
-                JTextField dayInput = new JTextField();
-                JButton calculate = new JButton("Get In Body");
-
-
-                AddPanelsToMain(1);
-                mainArea.add(new JLabel("Year: "));
-                mainArea.add(yearInput);
-                AddPanelsToMain(1);
-
-                AddPanelsToMain(1);
-                mainArea.add(new JLabel("Month: "));
-                mainArea.add(monthInput);
-                AddPanelsToMain(1);
-
-                AddPanelsToMain(1);
-                mainArea.add(new JLabel("Day: "));
-                mainArea.add(dayInput);
-                AddPanelsToMain(1);
-
-                mainArea.add(calculate);
-                AddPanelsToMain(4*9-1);
-
-                mainArea.revalidate();
-                mainArea.repaint();
-
-                calculate.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String year = yearInput.getText();
-                        String month = monthInput.getText();
-                        String day = dayInput.getText();
-                        try {
-                            String dateString = day + "/" + month + "/" + year;
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                            LocalDate date = LocalDate.parse(dateString, formatter);
-                            textAreaOutput = ((Customer)Gym.gym.currentPerson).displayInBodyInfoAtDate(date);
-                        } catch (DateTimeParseException exception){
-                            textAreaOutput = "Invalid Date";
-                        }
-
-                        mainTextArea.setText(textAreaOutput);
-                    }
-                });
-
-                //List<InBody> tempInBody = ((Customer)gym.currentPerson).getInBodyInfo();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        calculator.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetMainArea();
-                mainArea.revalidate();
-                mainArea.repaint();
-
-                textAreaOutput = ((Customer)Gym.gym.currentPerson).displayWeightLossGoal();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        addInBody.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton getInput = new JButton("Add In Body");
-                JTextField height = new JTextField();
-                JTextField weight = new JTextField();
-                JTextField bodyFat = new JTextField();
-                JTextField minerals = new JTextField();
-                JTextField water = new JTextField();
-                JTextField protein = new JTextField();
-
-                ResetTextArea();
-                ResetMainArea();
-
-                AddPanelsToMain(1);
-                mainArea.add(new JLabel("Height (cm):"));
-                mainArea.add(height);
-                AddPanelsToMain(2);
-                mainArea.add(new JLabel("Weight (KG): "));
-                mainArea.add(weight);
-                AddPanelsToMain(2);
-                mainArea.add(new JLabel("Body Fat Mass (KG)"));
-                mainArea.add(bodyFat);
-                AddPanelsToMain(2);
-                mainArea.add(new JLabel("Minerals (KG)"));
-                mainArea.add(minerals);
-                AddPanelsToMain(2);
-                mainArea.add(new JLabel("Total Body Water (KG)"));
-                mainArea.add(water);
-                AddPanelsToMain(2);
-                mainArea.add(new JLabel("Protein (KG)"));
-                mainArea.add(protein);
-                AddPanelsToMain(2);
-                mainArea.add(getInput);
-                AddPanelsToMain(2+5*4);
-
-                mainArea.repaint();
-                mainArea.revalidate();
-                getInput.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        LocalDate today = LocalDate.now();
-                        if (((Customer)Gym.gym.currentPerson).isAllowedToPerformInBody()){
-                            try{
-                                InBody inBody = new InBody(today,
-                                        Double.parseDouble(height.getText()), Double.parseDouble(weight.getText()),
-                                        Double.parseDouble(bodyFat.getText()), Double.parseDouble(minerals.getText()),
-                                        Double.parseDouble(water.getText()), Double.parseDouble(protein.getText()));
-                                ((Customer)Gym.gym.currentPerson).addInBody(inBody);
-                                textAreaOutput = "InBody added successfully";
-                            }
-                            catch (NumberFormatException a){
-                                textAreaOutput = "Invalid InBody";
-                            }
-                        } else textAreaOutput = "Not Allowed to Do InBody";
-                        mainTextArea.setText(textAreaOutput);
-                    }
-                });
-            }
-        });
-
-        deleteInBody.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(GUIPage.this, "Are you sure you want to proceed?", "Delete", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.YES_OPTION) ((Customer)Gym.gym.currentPerson).deleteLastInBody();
-            }
-        });
-    }
-
-    public void CoachPage(){
-        ResetPanels();
-        LoggedInPage();
-
-        JButton myCustomers = new JButton("My Customers");
-        JButton myMaleCustomers = new JButton("My Male Customers");
-        JButton myFemaleCustomers = new JButton("My Female Customers");
-        JButton myCustomersInBody = new JButton("Customer In-Bodies");
-        JButton allCustomers = new JButton("Customer Info By Name");
-
-        sidebar.add(myCustomers);
-        sidebar.add(myMaleCustomers);
-        sidebar.add(myFemaleCustomers);
-        sidebar.add(allCustomers);
-        sidebar.add(myCustomersInBody);
-        sidebar.add(new JLabel());
-        sidebar.add(new JLabel());
-        myCustomers.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetTextArea();
-                mainArea.repaint();
-                mainArea.revalidate();
-
-                textAreaOutput = ((Coach)Gym.gym.currentPerson).showCustomerList();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        myMaleCustomers.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetTextArea();
-                mainArea.repaint();
-                mainArea.revalidate();
-                textAreaOutput = ((Coach)Gym.gym.currentPerson).showMaleCustomers();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        myFemaleCustomers.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetTextArea();
-                ResetTextArea();
-                mainArea.repaint();
-                mainArea.revalidate();
-
-                textAreaOutput = ((Coach)Gym.gym.currentPerson).showFemaleCustomers();
-                mainTextArea.setText(textAreaOutput);
-            }
-        });
-
-        allCustomers.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetMainArea();
-                mainArea.repaint();
-                mainArea.revalidate();
-
-                JButton getInput = new JButton("Get Customer Details");
-                JTextField customerName = new JTextField();
-
-                AddPanelsToMain(1);
-                mainArea.add(getInput);
-                mainArea.add(customerName);
-                AddPanelsToMain(1+11*4);
-
-                getInput.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ResetTextArea();
-
-                        String name = customerName.getText();
-                        textAreaOutput = ((Coach)Gym.gym.currentPerson).getCustomerDetailsByName(name);
-                        mainTextArea.setText(textAreaOutput);
-                    }
-                });
-            }
-        });
-
-        myCustomersInBody.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResetMainArea();
-                mainArea.repaint();
-                mainArea.revalidate();
-
-                JButton getInput = new JButton("Get InBody");
-                JTextField customerID = new JTextField();
-
-                AddPanelsToMain(1);
-                mainArea.add(getInput);
-                mainArea.add(customerID);
-                AddPanelsToMain(1+11*4);
-
-                getInput.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ResetTextArea();
-
-                        int ID = Integer.parseInt(customerID.getText());
-                        textAreaOutput = ((Coach)Gym.gym.currentPerson).getInBodyHistory(ID);
-                        mainTextArea.setText(textAreaOutput);
-                    }
-                });
             }
         });
     }

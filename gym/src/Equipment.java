@@ -24,32 +24,12 @@ public class Equipment implements Serializable {
         return equipmentName;
     }
 
-    public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
-    }
-
     public int getEquipmentCode() {
         return equipmentCode;
-    }
-
-    public void setEquipmentCode(int equipmentCode) {
-        this.equipmentCode = equipmentCode;
     }
 
     public int getQuantity() {
         return quantity;
     }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-//    public String getEquipmentPhoto() {
-//        return equipmentPhoto;
-//    }
-//
-//    public void setEquipmentPhoto(String equipmentPhoto) {
-//        this.equipmentPhoto = equipmentPhoto;
-//    }
 
 }

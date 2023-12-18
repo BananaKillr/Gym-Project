@@ -23,28 +23,16 @@ public class MembershipPlan implements Serializable {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-        calculatePrice(); // Recalculate price after changing start date
-    }
 
     public PlanType getPlanType() {
         return planType;
     }
 
-    public void setPlanType(PlanType planType) {
-        this.planType = planType;
-        calculatePrice(); // Recalculate price after changing plan type
-    }
 
     public int getNumberOfMonths() {
         return numberOfMonths;
     }
 
-    public void setNumberOfMonths(int numberOfMonths) {
-        this.numberOfMonths = numberOfMonths;
-        calculatePrice(); // Recalculate price after changing number of months
-    }
 
     public double getPrice() {
         return price;
@@ -70,9 +58,4 @@ public class MembershipPlan implements Serializable {
         return price;
     }
 
-    public boolean equals(MembershipPlan membership1, MembershipPlan membership2){
-        return membership1.startDate.isEqual(membership2.startDate) &&
-                membership1.planType == membership2.planType &&
-                membership1.numberOfMonths == membership2.numberOfMonths;
-    }
 }
