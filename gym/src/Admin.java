@@ -284,7 +284,7 @@ public class Admin {
         double totalIncome = 0.0;
 
         for (Subscription subscription : Gym.gym.subscriptions) {
-            LocalDate startDate = subscription.getMembershipPlan().getStartDate();
+            LocalDate startDate = subscription.getMembershipPlan().getStartDate().plusMonths(-1);
             LocalDate endDate = startDate.plusMonths(subscription.getMembershipPlan().getNumberOfMonths());
 
             // Check if the subscription falls within the specified month and year

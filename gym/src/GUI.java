@@ -169,6 +169,7 @@ public class GUI {
             }
         });//To run save function when closing
         frame.pack();
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
         Gym.getDataFromFile();
 

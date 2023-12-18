@@ -26,9 +26,7 @@ public class Gym implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public static void setGym(Gym gym){
-        Gym.gym = gym;
-    }
+    public static void setGym(Gym gym){Gym.gym = gym;}
 
     public String getName() {
         return name;

@@ -36,6 +36,7 @@ public class GUIPage extends JFrame implements ActionListener {
         this.setSize(1000,1000);
         this.setVisible(true);
         this.setTitle(Gym.gym.getName());
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         //Settings for panels and layout
 
@@ -897,7 +898,6 @@ public class GUIPage extends JFrame implements ActionListener {
                                             customerPhoneNum.getText(), customerEmail.getText(), customerPassword.getPassword());
                                     newCustomer.setSubscription(subscription);
                                     mainTextArea.setText(Admin.addCustomer(newCustomer));
-                                    ResetMainArea();
                                 }
                                 catch (Exception exception){
                                     mainTextArea.setText("Invalid Customer Details");

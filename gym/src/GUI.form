@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI">
   <grid id="27dc6" binding="ParentPanel" layout-manager="CardLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="800" height="400"/>
+      <xy x="20" y="20" width="1168" height="806"/>
     </constraints>
     <properties>
       <background color="-1"/>
@@ -24,11 +24,11 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="75945" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="75945" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="400" height="400"/>
+                <preferred-size width="1000" height="400"/>
               </grid>
             </constraints>
             <properties>
@@ -41,17 +41,49 @@
               <color color="-16777207"/>
             </border>
             <children>
-              <component id="8713d" class="javax.swing.JLabel">
+              <component id="73e8" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <icon value="pngwing.com (Small).png"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <vspacer id="90622">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="e8599">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="f9a18" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <autoscrolls value="false"/>
                   <background color="-16777207"/>
                   <enabled value="true"/>
-                  <font size="28"/>
+                  <font size="36" style="1"/>
                   <foreground color="-256"/>
-                  <text value="Welcome To X Gym"/>
+                  <text value="Step In, Strive, and Conquer!"/>
+                </properties>
+              </component>
+              <component id="a2ece" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <autoscrolls value="false"/>
+                  <background color="-16777207"/>
+                  <enabled value="true"/>
+                  <font size="36" style="1"/>
+                  <foreground color="-256"/>
+                  <text value="Your Fitness Journey Begins Here"/>
                 </properties>
               </component>
             </children>
@@ -78,6 +110,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="22" style="1"/>
                   <text value="Coach Login"/>
                 </properties>
               </component>
@@ -88,6 +121,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="22" style="1"/>
                   <text value="Coach Registration"/>
                 </properties>
               </component>
@@ -98,6 +132,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="22"/>
                   <text value="Admin Login"/>
                 </properties>
               </component>
@@ -108,6 +143,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="22" style="1"/>
                   <text value="Customer Registration"/>
                 </properties>
               </component>
@@ -118,6 +154,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="22" style="1"/>
                   <text value="Customer Login"/>
                 </properties>
               </component>
@@ -153,7 +190,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="9f7ec" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="9f7ec" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -165,19 +202,51 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="bc374" class="javax.swing.JLabel">
+              <vspacer id="4ff9e">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="39b0f" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <autoscrolls value="false"/>
                   <background color="-16777207"/>
                   <enabled value="true"/>
-                  <font size="28"/>
+                  <font size="36" style="1"/>
                   <foreground color="-256"/>
-                  <text value="Welcome To X Gym"/>
+                  <text value="Let's get started"/>
                 </properties>
               </component>
+              <component id="bb654" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <autoscrolls value="false"/>
+                  <background color="-16777207"/>
+                  <enabled value="true"/>
+                  <font size="36" style="1"/>
+                  <foreground color="-256"/>
+                  <text value="Welcome back! Your journey continues."/>
+                </properties>
+              </component>
+              <component id="d2aa3" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <icon value="pngwing.com (1) (Small).png"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <vspacer id="98beb">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
             </children>
           </grid>
           <grid id="962c5" layout-manager="GridLayoutManager" row-count="6" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -358,7 +427,7 @@
               </component>
             </children>
           </grid>
-          <grid id="2484d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="2484d" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -370,17 +439,49 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="d2bbf" class="javax.swing.JLabel">
+              <vspacer id="b35a7">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="6031e">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="dcd55" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <autoscrolls value="false"/>
                   <background color="-16777207"/>
                   <enabled value="true"/>
-                  <font size="28"/>
+                  <font size="36" style="1"/>
                   <foreground color="-256"/>
-                  <text value="Welcome To X Gym"/>
+                  <text value="Hello, Captain of Inspiration!"/>
+                </properties>
+              </component>
+              <component id="9ef15" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <autoscrolls value="false"/>
+                  <background color="-16777207"/>
+                  <enabled value="true"/>
+                  <font size="36" style="1"/>
+                  <foreground color="-256"/>
+                  <text value="Ready to take control?"/>
+                </properties>
+              </component>
+              <component id="bbe30" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <icon value="pngwing.com (Small).png"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>
@@ -479,7 +580,7 @@
               </hspacer>
             </children>
           </grid>
-          <grid id="d9a20" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="d9a20" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -491,17 +592,49 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="aa8f0" class="javax.swing.JLabel">
+              <vspacer id="19bb6">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="1aead">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="8e08d" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <autoscrolls value="false"/>
                   <background color="-16777207"/>
                   <enabled value="true"/>
-                  <font size="28"/>
+                  <font size="36" style="1"/>
                   <foreground color="-256"/>
-                  <text value="Welcome To X Gym"/>
+                  <text value="Your guidance turns dreams into achievements.&quot;  "/>
+                </properties>
+              </component>
+              <component id="b9d17" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <autoscrolls value="false"/>
+                  <background color="-16777207"/>
+                  <enabled value="true"/>
+                  <font size="36" style="1"/>
+                  <foreground color="-256"/>
+                  <text value="Welcome back, Mentor!"/>
+                </properties>
+              </component>
+              <component id="c92ba" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <icon value="pngwing.com (2) (Small).png"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>

@@ -54,7 +54,7 @@ public class MembershipPlan implements Serializable {
         }
 
         double discountedPrice = basePricePerMonth * (1 - discountPercentage / 100);
-        price = discountedPrice * numberOfMonths;
+        price = discountedPrice;
         return price;
     }
 
