@@ -170,7 +170,7 @@ public class GUI {
         });//To run save function when closing
         frame.pack();
         frame.setVisible(true);
-        Gym.getDataFromFile();
+        Gym gym = Gym.getDataFromFile();
 
         //To create a custom gym use constructor
         //To make program use that gym object, use Gym.setGym()
