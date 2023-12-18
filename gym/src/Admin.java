@@ -197,13 +197,13 @@ public class Admin {
                 if (customerSubscriptions.isEmpty()) break;
                 int i = 1;
                 for (Subscription subscription : customerSubscriptions) {
-                    returnString += ("Subscription Number: " + i);
-                    returnString += ("Customer Id: " + customerId);
-                    returnString += ("Assigned Coach Id: " + subscription.getAssignedCoachId());
-                    returnString += ("Start Date: " + subscription.getMembershipPlan().getStartDate());
-                    returnString += ("Membership Plan Type: " + subscription.getMembershipPlan().getPlanType());
-                    returnString += ("Number of Months: " + subscription.getMembershipPlan().getNumberOfMonths());
-                    returnString += ("Price: " + subscription.getMembershipPlan().getPrice());
+                    returnString += ("\n\nSubscription Number: " + i);
+                    returnString += ("\nCustomer Id: " + customerId);
+                    returnString += ("\nAssigned Coach Id: " + subscription.getAssignedCoachId());
+                    returnString += ("\nStart Date: " + subscription.getMembershipPlan().getStartDate());
+                    returnString += ("\nMembership Plan Type: " + subscription.getMembershipPlan().getPlanType());
+                    returnString += ("\nNumber of Months: " + subscription.getMembershipPlan().getNumberOfMonths());
+                    returnString += ("\nPrice: " + subscription.getMembershipPlan().getPrice());
                     i++;
                 }
                 return returnString;

@@ -897,6 +897,7 @@ public class GUIPage extends JFrame implements ActionListener {
                                             customerPhoneNum.getText(), customerEmail.getText(), customerPassword.getPassword());
                                     newCustomer.setSubscription(subscription);
                                     mainTextArea.setText(Admin.addCustomer(newCustomer));
+                                    ResetMainArea();
                                 }
                                 catch (Exception exception){
                                     mainTextArea.setText("Invalid Customer Details");
