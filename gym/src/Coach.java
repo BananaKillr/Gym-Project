@@ -9,7 +9,7 @@ public class Coach extends Person implements Serializable {
     private static final long serialVersionUID = 2L;
     private static final int MAX_CUSTOMERS = 10;
     private int maxWorkingHoursPerDay;
-    private List<Customer> customers;
+    private List<Customer> customers = new ArrayList<>();
 
     public Coach(int id, String name, char gender, String address, String phoneNumber, String email, int maxWorkingHoursPerDay, char[] password) {
         super(id, name, gender, address, phoneNumber, email, password);
@@ -36,9 +36,6 @@ public class Coach extends Person implements Serializable {
     public void addCustomer(Customer customer) {
         if (customers.size() < MAX_CUSTOMERS) {
             customers.add(customer);
-            System.out.println("Customer added successfully.");
-        } else {
-            System.out.println("Cannot add more customers. Maximum limit reached.");
         }
     }
 
@@ -83,16 +80,14 @@ public class Coach extends Person implements Serializable {
 
         return result;
     }
+
     public String getCustomerDetailsByName(String customerName) {
         String result = "Customers with name " + customerName;
-        ArrayList<Customer> customersWithName = new ArrayList<>();
-        for (Customer customer : customers) {
+
+        for (Customer customer : Gym.gym.customers) {
             if (customer.getName().equalsIgnoreCase(customerName)) {
-                customersWithName.add(customer);
+                result += ("\nCustomer ID: " + customer.getId() + ", Name: " + customer.getName());
             }
-        }
-        for (Customer customer : customersWithName){
-            result += ("\nCustomer ID: " + customer.getId() + ", Name: " + customer.getName());
         }
         return result;
     }

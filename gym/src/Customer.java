@@ -10,8 +10,8 @@ public class Customer extends Person implements Serializable {
     private static final long serialVersionUID = 4L;
     // Additional attributes for Customer
     private Subscription subscription;
-    private ArrayList<Subscription> oldSubscription;
-    private List<InBody> inBodyInfo;
+    private ArrayList<Subscription> oldSubscription = new ArrayList<>();
+    private List<InBody> inBodyInfo = new ArrayList<>();
 
     // Constructor
 
@@ -21,6 +21,10 @@ public class Customer extends Person implements Serializable {
     //getters and setters
     public Subscription getSubscription() {
         return subscription;
+    }
+
+    public void setOldSubscription(ArrayList<Subscription> subscriptions){
+        this.oldSubscription =subscriptions;
     }
 
     public void setSubscription(Subscription subscription) {
@@ -144,7 +148,7 @@ public class Customer extends Person implements Serializable {
         }
     }
 
-    public List<Subscription> getOldSubscription() {
+    public ArrayList<Subscription> getOldSubscription() {
         return oldSubscription;
     }
 
@@ -153,7 +157,6 @@ public class Customer extends Person implements Serializable {
         try {
             oldSubscription.add(subscription);
             subscription = newSubscription;
-
             result += ("Subscription updated successfully.");
 
         } catch (Exception e) {

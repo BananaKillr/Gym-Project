@@ -104,11 +104,10 @@ public class GUIPage extends JFrame implements ActionListener {
         scrollableArea.repaint();
     }// Resets mainTextArea
 
-    public void CloseOperation(){//TODO Make this save data
-        System.out.println("Data Saved");
+    public void CloseOperation(){
         this.dispose();
+        Gym.saveData();
         System.exit(0);
-        //Gym.saveData();
     }
 
     public void LoggedInPage(){
@@ -132,20 +131,17 @@ public class GUIPage extends JFrame implements ActionListener {
         });
     }// User's name + logout button
 
-    public void AdminPage() {//TODO FINISH ADMIN
+    public void AdminPage() {
             ResetPanels();
             LoggedInPage();
 
         JButton addCoach = new JButton("Add Coach");
-        JButton deleteCoach = new JButton("Delete Coaches");
         JButton editCoaches = new JButton("Edit Coaches");
 
         JButton addEquipment = new JButton("Add Equipment");
-        JButton deleteEquipment = new JButton("Delete Equipment");
         JButton editEquipment = new JButton("Edit Equipment");
 
         JButton addCustomer = new JButton("Add Customer");
-        JButton deleteCustomer = new JButton("Delete Customer");
         JButton editCustomer = new JButton("Edit Customer");
 
         JButton customerHistory = new JButton("Customer History");
@@ -172,7 +168,13 @@ public class GUIPage extends JFrame implements ActionListener {
         addCoach.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int coachID = (Gym.gym.coaches.getLast().getId() + 1);
+                int coachID;
+                try {
+                    coachID = (Gym.gym.coaches.getLast().getId() + 1);
+                }
+                catch (Exception exception){
+                    coachID = 1;
+                }
                 JTextField coachName = new JTextField();
                 String[] selection = {"M", "F"};
                 JComboBox coachGender = new JComboBox(selection);
@@ -214,13 +216,14 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.add(getInput);
                 AddPanelsToMain(2+3*4);
 
+                int finalCoachID = coachID;
                 getInput.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         char gender = 'M';
                         if (coachGender.getSelectedIndex() == 1) gender = 'F';
                         try{
-                            Coach coach = new Coach(coachID, coachName.getText(),
+                            Coach coach = new Coach(finalCoachID, coachName.getText(),
                                     gender, coachAddress.getText(), coachPhoneNum.getText(), coachEmail.getText(),
                                     Integer.parseInt(coachMaxHours.getText()), coachPassword.getPassword());
                             Admin.addCoach(coach);
@@ -263,7 +266,7 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.add(new JLabel("Enter ID:"));
                 mainArea.add(coachID);
                 mainArea.add(getCoachID);
-                AddPanelsToMain(1+4*11);
+                AddPanelsToMain(4*11);
                 mainArea.revalidate();
                 mainArea.repaint();
 
@@ -352,8 +355,8 @@ public class GUIPage extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Delete", JOptionPane.YES_NO_OPTION);
                        if (input == 0){
-                           Admin.deleteCoach(Integer.parseInt(coachID.getText()));
-                           textAreaOutput = "Coach Deleted Successfully";
+
+                           mainTextArea.setText(Admin.deleteCoach(intCoachID[0]));
                            ResetMainArea();
                        }
                     }
@@ -365,17 +368,22 @@ public class GUIPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JTextField equipmentName = new JTextField();
-                JTextField equipmentID = new JTextField();
                 JTextField equipmentQuantity = new JTextField();
-                JTextField equipmentPhoto = new JTextField();
                 JButton getInput = new JButton("Add Equipment");
+                int intEquipmentID;
+                try {
+                    intEquipmentID = Gym.gym.sportsEquipments.getLast().getEquipmentCode() + 1;
+                }
+                catch (Exception exception){
+                    intEquipmentID = 1;
+                }
 
                 ResetMainArea();
                 ResetTextArea();
 
                 AddPanelsToMain(1);
                 mainArea.add(new JLabel("Equipment ID:"));
-                mainArea.add(equipmentID);
+                mainArea.add(new JLabel(Integer.toString(intEquipmentID)));
                 AddPanelsToMain(2);
                 mainArea.add(new JLabel("Equipment Name:"));
                 mainArea.add(equipmentName);
@@ -383,14 +391,28 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.add(new JLabel("Equipment Quantity:"));
                 mainArea.add(equipmentQuantity);
                 AddPanelsToMain(2);
-                mainArea.add(new JLabel("Photo Path:"));
-                mainArea.add(equipmentPhoto);
-                AddPanelsToMain(2);
                 mainArea.add(getInput);
-                AddPanelsToMain(2+7*4);
+                AddPanelsToMain(2+8*4);
 
                 mainArea.revalidate();
                 mainArea.repaint();
+
+                int finalIntEquipmentID = intEquipmentID;
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            Equipment equipment = new Equipment(equipmentName.getText(), finalIntEquipmentID,
+                                    Integer.parseInt(equipmentQuantity.getText()));
+                            Admin.addEquipment(equipment);
+                            mainTextArea.setText("Equipment Added Successfully");
+                            ResetMainArea();
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid Inputs");
+                        };
+                    }
+                });
             }
         });
 
@@ -400,9 +422,10 @@ public class GUIPage extends JFrame implements ActionListener {
                 JTextField equipmentName = new JTextField();
                 JTextField equipmentID = new JTextField();
                 JTextField equipmentQuantity = new JTextField();
-                JTextField equipmentPhoto = new JTextField();
-                JButton getInput = new JButton("Add Equipment");
+                JButton getInput = new JButton("Edit Equipment");
                 JButton getEquipmentID = new JButton("Get ID");
+                JButton deleteEquipment = new JButton("Delete Equipment");
+                final int[] intEquipmentID = new int[1];
 
                 ResetMainArea();
                 ResetTextArea();
@@ -418,21 +441,62 @@ public class GUIPage extends JFrame implements ActionListener {
                 getEquipmentID.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ResetMainArea();
-                        AddPanelsToMain(5);
-                        mainArea.add(new JLabel("Equipment Name:"));
-                        mainArea.add(equipmentName);
-                        AddPanelsToMain(2);
-                        mainArea.add(new JLabel("Equipment Quantity:"));
-                        mainArea.add(equipmentQuantity);
-                        AddPanelsToMain(2);
-                        mainArea.add(new JLabel("Photo Path:"));
-                        mainArea.add(equipmentPhoto);
-                        AddPanelsToMain(2);
-                        mainArea.add(getInput);
-                        AddPanelsToMain(2+7*4);
-                        mainArea.revalidate();
-                        mainArea.repaint();
+                        try{
+                            for (Equipment equipment : Gym.gym.sportsEquipments){
+                                if (Integer.parseInt(equipmentID.getText()) == equipment.getEquipmentCode()){
+                                    intEquipmentID[0] = equipment.getEquipmentCode();
+                                    equipmentName.setText(equipment.getEquipmentName());
+                                    equipmentQuantity.setText(Integer.toString(equipment.getQuantity()));
+
+                                    ResetMainArea();
+                                    AddPanelsToMain(5);
+                                    mainArea.add(new JLabel("Equipment Name:"));
+                                    mainArea.add(equipmentName);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Equipment Quantity:"));
+                                    mainArea.add(equipmentQuantity);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(getInput);
+                                    mainArea.add(deleteEquipment);
+                                    AddPanelsToMain(1+8*4);
+                                    mainArea.revalidate();
+                                    mainArea.repaint();
+                                    break;
+                                }
+                            }
+                        }
+                        catch (Exception exception) {
+                            mainTextArea.setText("Invalid Input");
+                        }
+
+                    }
+                });
+
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            Equipment editedEquipment = new Equipment(equipmentName.getText(),
+                                    Integer.parseInt(equipmentID.getText()), Integer.parseInt(equipmentQuantity.getText()));
+                            Admin.editEquipment(intEquipmentID[0], editedEquipment);
+                            mainTextArea.setText("Equipment Edited Successfully");
+                            ResetMainArea();
+                        }
+                        catch (Exception exception) {
+                            mainTextArea.setText("Invalid Inputs");
+                        }
+                    }
+                });
+
+                deleteEquipment.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Delete", JOptionPane.YES_NO_OPTION);
+                        if (input == 0){
+                            Admin.deleteEquipment(intEquipmentID[0]);
+                            mainTextArea.setText("Equipment Deleted Successfully");
+                            ResetMainArea();
+                        }
                     }
                 });
             }
@@ -452,17 +516,24 @@ public class GUIPage extends JFrame implements ActionListener {
                 JComboBox membershipPlan = new JComboBox<>(planSelection);
 
                 //Customer Details
-                JTextField customerID = new JTextField();
                 JTextField customerName = new JTextField();
                 String[] genderSelection = {"M", "F"};
                 JComboBox customerGender = new JComboBox(genderSelection);
                 JTextField customerAddress = new JTextField();
                 JTextField customerEmail = new JTextField();
                 JTextField customerPhoneNum = new JTextField();
+                JPasswordField customerPassword = new JPasswordField();
+                int intCustomerID;
+                try{
+                    intCustomerID = Gym.gym.customers.getLast().getId() + 1;
+                }
+                catch (Exception exception){
+                    intCustomerID = 1;
+                }
 
                 AddPanelsToMain(1);
                 mainArea.add(new JLabel("Customer ID:"));
-                mainArea.add(customerID);
+                mainArea.add(new JLabel(Integer.toString(intCustomerID)));
                 AddPanelsToMain(2);
                 mainArea.add(new JLabel("Customer Name: "));
                 mainArea.add(customerName);
@@ -479,6 +550,9 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.add(new JLabel("Phone Number: "));
                 mainArea.add(customerPhoneNum);
                 AddPanelsToMain(2);
+                mainArea.add(new JLabel("Password"));
+                mainArea.add(customerPassword);
+                AddPanelsToMain(2);
                 mainArea.add(new JLabel("Coach ID:"));
                 mainArea.add(coachID);
                 AddPanelsToMain(2);
@@ -489,10 +563,45 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.add(numberOfMonths);
                 AddPanelsToMain(2);
                 mainArea.add(getInput);
-                AddPanelsToMain(2+8);
+                AddPanelsToMain(6);
 
                 mainArea.revalidate();
                 mainArea.repaint();
+
+                int finalIntCustomerID = intCustomerID;
+                getInput.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {//Creating Membership
+                            PlanType planType = PlanType.THREE_DAYS_PER_WEEK;
+                            if (membershipPlan.getSelectedIndex() == 1) planType = PlanType.SIX_DAYS_PER_WEEK;
+                            MembershipPlan customerMembership = new MembershipPlan(LocalDate.now(), planType,
+                                    Integer.parseInt(numberOfMonths.getText()));
+
+                            try {//Creating Subscription
+                                Subscription subscription = new Subscription(finalIntCustomerID, Integer.parseInt(coachID.getText()),
+                                        customerMembership);
+                                try {
+                                    char gender = 'M';
+                                    if (customerGender.getSelectedIndex() == 1) gender = 'F';
+                                    Customer newCustomer = new Customer(finalIntCustomerID, customerName.getText(), gender, customerAddress.getText(),
+                                            customerPhoneNum.getText(), customerEmail.getText(), customerPassword.getPassword());
+                                    newCustomer.setSubscription(subscription);
+                                    mainTextArea.setText(Admin.addCustomer(newCustomer));
+                                }
+                                catch (Exception exception){
+                                    mainTextArea.setText("Invalid Customer Details");
+                                }
+                            }
+                            catch (Exception exception){
+                                mainTextArea.setText("Invalid Subscription");
+                            }
+                        }
+                        catch (Exception exception) {
+                            mainTextArea.setText("Invalid Membership");
+                        }
+                    }
+                });
             }
         });
 
@@ -501,8 +610,150 @@ public class GUIPage extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 ResetMainArea();
                 ResetTextArea();
+
+                JButton getID = new JButton("Enter Customer Info");
+                JButton deleteCustomer = new JButton("Delete Customer");
+                JButton editSubscription = new JButton("Edit Customer Subscription");
+                JButton editCustomerDetails = new JButton("Edit Customer Details");
+
+                // Plan and Subscription
+                JTextField coachID = new JTextField();
+                JTextField numberOfMonths = new JTextField();
+                String[] planSelection = {"3 Days per Week", "6 Days per Week"};
+                JComboBox membershipPlan = new JComboBox<>(planSelection);
+
+                //Customer Details
+                JTextField customerID = new JTextField();
+                JTextField customerName = new JTextField();
+                String[] genderSelection = {"M", "F"};
+                JComboBox customerGender = new JComboBox(genderSelection);
+                JTextField customerAddress = new JTextField();
+                JTextField customerEmail = new JTextField();
+                JTextField customerPhoneNum = new JTextField();
+                JPasswordField customerPassword = new JPasswordField();
+
+                final int[] intCustomerID = new int[1];
+
+                AddPanelsToMain(1);
+                mainArea.add(new JLabel("Customer ID :"));
+                mainArea.add(customerID);
+                mainArea.add(getID);
+                AddPanelsToMain(11*4);
+
                 mainArea.revalidate();
                 mainArea.repaint();
+
+                getID.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try{
+                            intCustomerID[0] = Integer.parseInt(customerID.getText());
+                            boolean customerFound = false;
+                            for (Customer customer : Gym.gym.customers){
+                                if (customer.getId() == intCustomerID[0]){
+                                    customerFound = true;
+                                    ResetTextArea();
+                                    ResetMainArea();
+                                    AddPanelsToMain(5);
+                                    mainArea.add(new JLabel("Customer Name: "));
+                                    mainArea.add(customerName);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Gender:"));
+                                    mainArea.add(customerGender);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Address: "));
+                                    mainArea.add(customerAddress);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Email"));
+                                    mainArea.add(customerEmail);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Phone Number: "));
+                                    mainArea.add(customerPhoneNum);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Password"));
+                                    mainArea.add(customerPassword);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Coach ID:"));
+                                    mainArea.add(coachID);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Plan Type: "));
+                                    mainArea.add(membershipPlan);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(new JLabel("Number of Months: "));
+                                    mainArea.add(numberOfMonths);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(editCustomerDetails);
+                                    mainArea.add(deleteCustomer);
+                                    AddPanelsToMain(2);
+                                    mainArea.add(editSubscription);
+                                    AddPanelsToMain(2);
+
+                                    customerName.setText(customer.getName());
+                                    if (customer.getGender() == 'M') customerGender.setSelectedIndex(0);
+                                    else customerGender.setSelectedIndex(1);
+                                    customerAddress.setText(customer.getAddress());
+                                    customerEmail.setText(customer.getEmail());
+                                    customerPhoneNum.setText(customer.getPhoneNumber());
+                                    String password = "";
+                                    for (char a : customer.getPassword()) password += a;
+                                    customerPassword.setText(password);
+                                    coachID.setText(Integer.toString(customer.getCoachID()));
+                                    if (customer.getSubscription().getMembershipPlan().getPlanType() == PlanType.THREE_DAYS_PER_WEEK) membershipPlan.setSelectedIndex(0);
+                                    else membershipPlan.setSelectedIndex(1);
+                                    numberOfMonths.setText(Integer.toString(customer.getSubscription().getMembershipPlan().getNumberOfMonths()));
+                                    break;
+                                }
+                            }
+                            if (!customerFound) mainTextArea.setText("Customer Not Found");
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid ID");
+                        }
+                    }
+                });
+
+                deleteCustomer.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Delete", JOptionPane.YES_NO_OPTION);
+                        if (input == 0){
+                            mainTextArea.setText(Admin.deleteCustomer(intCustomerID[0]));
+                            ResetMainArea();
+                        }
+                    }
+                });
+
+                editSubscription.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            PlanType planType = PlanType.THREE_DAYS_PER_WEEK;
+                            if (membershipPlan.getSelectedIndex() == 1) planType = PlanType.SIX_DAYS_PER_WEEK;
+                            MembershipPlan newMembership = new MembershipPlan(LocalDate.now(), planType, Integer.parseInt(numberOfMonths.getText()));
+                            Subscription newSubscription = new Subscription(intCustomerID[0], Integer.parseInt(coachID.getText()), newMembership);
+                            mainTextArea.setText(Admin.editCustomerSubscription(intCustomerID[0], newSubscription));
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid Subscription Details");
+                        }
+                    }
+                });//TODO FINISH THIS
+
+                editCustomerDetails.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try{
+                            char gender = 'M';
+                            if (customerGender.getSelectedIndex() == 1) gender = 'F';
+                            Customer newCustomer = new Customer(intCustomerID[0], customerName.getText(), gender,
+                                    customerAddress.getText(), customerPhoneNum.getText(), customerEmail.getText(), customerPassword.getPassword());
+                            mainTextArea.setText(Admin.editCustomerDetails(newCustomer));
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid Customer Details");
+                        }
+                    }
+                });
             }
         });
 
@@ -523,9 +774,7 @@ public class GUIPage extends JFrame implements ActionListener {
                 getInput.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String customerIDString = customerID.getText();
-                        //mainTextArea.setText(new Admin().returnSubscriptionHistory(customerIDString));
-                        if (mainTextArea.getText().equals("")) mainTextArea.setText("Customer Not Found or No Customer History");
+                        mainTextArea.setText(Admin.displaySubscriptionHistory(Integer.parseInt(customerID.getText())));
                     }
                 });
                 mainArea.revalidate();
@@ -559,6 +808,36 @@ public class GUIPage extends JFrame implements ActionListener {
                 AddPanelsToMain(1+8*4);
                 mainArea.revalidate();
                 mainArea.repaint();
+
+                getMonthly.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ResetTextArea();
+                        ResetTextArea();
+
+                        try {
+                            mainTextArea.setText(Admin.displayCustomersSubscribedInMonth(Integer.parseInt(month.getText()), Integer.parseInt(year.getText())));
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid Date");
+                        }
+                    }
+                });
+
+                getDaily.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ResetTextArea();
+                        ResetTextArea();
+
+                        try {
+                            mainTextArea.setText(Admin.displayCustomersSubscribedInDay(Integer.parseInt(day.getText()), Integer.parseInt(month.getText()), Integer.parseInt(year.getText())));
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid Date");
+                        }
+                    }
+                });
             }
         });
 
@@ -588,10 +867,15 @@ public class GUIPage extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         String dateString = "01/" + month.getText() + "/" + year.getText();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        LocalDate date = LocalDate.parse(dateString, formatter);
-                        double income = Gym.gym.displayIncomeInMonth(Integer.parseInt(month.getText()), Integer.parseInt(year.getText()));
-                        textAreaOutput = income + " per month";
-                        mainTextArea.setText(textAreaOutput);
+                        try {
+                            LocalDate date = LocalDate.parse(dateString, formatter);
+                            double income = Admin.displayIncomeInMonth(date);
+                            mainTextArea.setText(income + " per month");
+                        }
+                        catch (Exception exception){
+                            mainTextArea.setText("Invalid Date");
+                        }
+
                     }
                 });
             }
@@ -618,13 +902,7 @@ public class GUIPage extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         int ID = Integer.parseInt(coachID.getText());
                         ResetTextArea();
-                        for (Customer customer : Gym.gym.customers){
-                            if (customer.getCoachID() == ID){
-                                textAreaOutput += "Customer ID: " + customer.getId() + ", Name: " + customer.getName() + "\n";
-                            }
-                        }
-                        if (textAreaOutput.isEmpty()) textAreaOutput = "No customers";
-                        mainTextArea.setText(textAreaOutput);
+                        mainTextArea.setText(Admin.displayCustomersOfCoach(ID));
                     }
                 });
             }
@@ -637,7 +915,7 @@ public class GUIPage extends JFrame implements ActionListener {
                 ResetMainArea();
                 mainArea.revalidate();
                 mainArea.repaint();
-                textAreaOutput = Gym.gym.SortCoachesByCustomers(Gym.gym.coaches);
+                textAreaOutput = Admin.SortCoachesByCustomers(Gym.gym.coaches);
                 mainTextArea.setText(textAreaOutput);
             }
         });

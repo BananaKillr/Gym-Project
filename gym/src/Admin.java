@@ -1,13 +1,27 @@
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class Admin {
     private Admin(){} //Can't make object of admin. Only contains static methods
-    //TODO move functions from gym/gui to here
-    public void addCustomer(Customer newCustomer) {
+    public static String addCustomer(Customer newCustomer) {
+        Coach customersCoach = null;
+        for (Coach coach : Gym.gym.coaches){
+            if (coach.getId() == newCustomer.getCoachID()){
+                customersCoach = coach;
+                if (coach.getCustomers().size() < 10) break;
+                else return "Coach List Full";
+            }
+        }
+        if (customersCoach == null) return "Coach Not Found";
+        customersCoach.addCustomer(newCustomer);
         Gym.gym.customers.add(newCustomer);
+        Gym.gym.subscriptions.add(newCustomer.getSubscription());
+        return "Customer Added Successfully";
     }
 
     public static void addCoach(Coach newCoach) {
@@ -18,46 +32,37 @@ public class Admin {
         Gym.gym.sportsEquipments.add(newEquipment);
     }
 
-    public static void deleteCustomer(int customerID) {
-        try {
-            int index = -1;
-            for (int i = 0; i < Gym.gym.customers.size(); i++) {
-                if (Gym.gym.customers.get(i).getId() == customerID) {
-                    index = i;
-                }
+    public static String deleteCustomer(int customerID) {//TODO CHANGE THIS!!
+        Customer customerToBeDeleted = null;
+        Coach coachWithCustomer = null;
+        for (Customer customer : Gym.gym.customers){
+            if (customer.getId() == customerID){
+                customerToBeDeleted = customer;
+                break;
             }
-            if (index != -1) {
-                Gym.gym.customers.remove(index);
-                System.out.println("Customer with ID " + customerID + " deleted successfully.");
-            } else {
-                throw new IllegalArgumentException("Customer not found with ID: " + customerID);
-            }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Error: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
+
+        for (Coach coach : Gym.gym.coaches){
+            if (coach.getId() == customerToBeDeleted.getCoachID()){
+                coachWithCustomer = coach;
+                break;
+            }
+        }
+
+        Gym.gym.customers.remove(customerToBeDeleted);
+        coachWithCustomer.getCustomers().remove(customerToBeDeleted);
+        return "Customer Deleted Successfully";
     }
 
-    public static void deleteCoach(int coachID) {
-        try {
-            int index = -1;
-            for (int i = 0; i < Gym.gym.coaches.size(); i++) {
-                if (Gym.gym.coaches.get(i).getId() == coachID) {
-                    index = i;
-                }
+    public static String deleteCoach(int coachID) {
+        for (Coach coach : Gym.gym.coaches){
+            if (coach.getId() == coachID){
+                if (!coach.getCustomers().isEmpty()) return "Coach Has Customers. Not Allowed To Delete";
+                Gym.gym.coaches.remove(coach);
+                return "Coach Removed Successfully";
             }
-            if (index != -1) {
-                Gym.gym.coaches.remove(index);
-                System.out.println("Coach with ID " + coachID + " deleted successfully.");
-            } else {
-                throw new IllegalArgumentException("Coach not found with ID: " + coachID);
-            }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Error: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
+        return "Coach Not Found";
     }
 
     public static void deleteEquipment(int equipmentCode) {
@@ -81,29 +86,59 @@ public class Admin {
         }
     }
 
-    public static void editCustomer(int customerId, Customer newCustomer) {
-        try {
-            boolean customerFound = false;
-
-            for (Customer customer : Gym.gym.customers) {
-                if (customer.getId() == customerId) {
-                    customerFound = true;
-
-                    // Replace the old customer with the new one
-                    int index = Gym.gym.customers.indexOf(customer);
-                    Gym.gym.customers.set(index, newCustomer);
-
-                    System.out.println("Customer with ID " + customerId + " updated successfully.");
-                    break;
-                }
+    public static String editCustomerDetails(Customer newCustomer){//Gets passed to it a customer with the same subscription and ID
+        Customer customerToBeEdited = null;
+        for (Customer customer : Gym.gym.customers){
+            if (customer.getId() == newCustomer.getId()) {
+                customerToBeEdited = customer;
+                break;
             }
-
-            if (!customerFound) {
-                throw new IllegalArgumentException("Customer not found with ID: " + customerId);
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
         }
+        if (customerToBeEdited == null) return "Customer Not Found";
+        newCustomer.setSubscription(customerToBeEdited.getSubscription());
+        newCustomer.setOldSubscription(customerToBeEdited.getOldSubscription());
+        newCustomer.setInBodyInfo(customerToBeEdited.getInBodyInfo());
+        Gym.gym.customers.set(Gym.gym.customers.indexOf(customerToBeEdited), newCustomer);
+        return "Customer Details Edited Successfully";
+    }
+
+    public static String editCustomerSubscription(int customerID, Subscription newSubscription){//Gets passed to it customer id and new subscription
+        Customer customerToBeEdited = null;
+
+        //Searches for customer
+        for (Customer customer : Gym.gym.customers){
+            if (customer.getId() == customerID) {
+                customerToBeEdited = customer;
+                break;
+            }
+        }
+        if (customerToBeEdited == null) return "Customer Not Found";
+
+        //Checks if new coach has space
+        Coach newCoach = null;
+        Coach oldCoach = null;
+        for (Coach coach : Gym.gym.coaches){
+            if (coach.getId() == newSubscription.getAssignedCoachId()) {
+                if (coach.getCustomers().size() > 9) return "Coach List Full";
+                newCoach = coach;
+            }
+            if (coach.getId() == customerToBeEdited.getCoachID()){
+                oldCoach = coach;
+            }
+        }
+        if (newCoach == null) return "Coach Not Found";
+        Gym gym = Gym.gym;
+        //Setting New Subscription
+        customerToBeEdited.updateSubscription(newSubscription);
+
+        //Updating coaches' customer lists
+        oldCoach.getCustomers().remove(customerToBeEdited);
+        newCoach.getCustomers().add(customerToBeEdited);
+
+        Gym.gym.subscriptions.remove(customerToBeEdited.getSubscription());
+        Gym.gym.subscriptions.add(newSubscription);
+
+        return "Subscription Edited Successfully";
     }
 
     public static void editCoach(int coachId, Coach newCoach) {
@@ -118,7 +153,6 @@ public class Admin {
                     int index = Gym.gym.coaches.indexOf(coach);
                     Gym.gym.coaches.set(index, newCoach);
 
-                    System.out.println("Coach with ID " + coachId + " updated successfully.");
                     break;
                 }
             }
@@ -143,7 +177,6 @@ public class Admin {
                     int index = Gym.gym.sportsEquipments.indexOf(equipment);
                     Gym.gym.sportsEquipments.set(index, newEquipment);
 
-                    System.out.println("Equipment with Code " + equipmentCode + " updated successfully.");
                     break;
                 }
             }
@@ -156,40 +189,35 @@ public class Admin {
         }
     }
 
-    public static void displaySubscriptionHistory(int customerId) {
-        try {
-            System.out.println("Subscription history for Customer with ID " + customerId + ":");
-
-            for (Customer customer : Gym.gym.customers) {
-                if (customer.getId() == customerId) {
-                    List<Subscription> customerSubscriptions = customer.getOldSubscription();
-                    int i = 1;
-                    for (Subscription subscription : customerSubscriptions) {
-                        System.out.println("Subscription Number: " + i );
-                        System.out.println("Customer Id: " + customerId );
-                        System.out.println("Assigned Coach Id: " + subscription.getAssignedCoachId() );
-                        System.out.println("Start Date: " + subscription.getMembershipPlan().getStartDate());
-                        System.out.println("Membership Plan Type: " + subscription.getMembershipPlan().getPlanType());
-                        System.out.println("Number of Months: " + subscription.getMembershipPlan().getNumberOfMonths());
-                        System.out.println("Price: " + subscription.getMembershipPlan().getPrice());
-                        System.out.println(); // Add a line break for better readability
-                        i++;
-                    }
-                    return; // Exit the loop once the customer is found
+    public static String displaySubscriptionHistory(int customerId) {
+        String returnString = "";
+        for (Customer customer : Gym.gym.customers) {
+            if (customer.getId() == customerId) {
+                returnString += ("Subscription history for Customer with ID " + customerId + ":");
+                List<Subscription> customerSubscriptions = customer.getOldSubscription();
+                if (customerSubscriptions.isEmpty()) return "No Subscription History";
+                if (customerSubscriptions.isEmpty()) break;
+                int i = 1;
+                for (Subscription subscription : customerSubscriptions) {
+                    returnString += ("Subscription Number: " + i);
+                    returnString += ("Customer Id: " + customerId);
+                    returnString += ("Assigned Coach Id: " + subscription.getAssignedCoachId());
+                    returnString += ("Start Date: " + subscription.getMembershipPlan().getStartDate());
+                    returnString += ("Membership Plan Type: " + subscription.getMembershipPlan().getPlanType());
+                    returnString += ("Number of Months: " + subscription.getMembershipPlan().getNumberOfMonths());
+                    returnString += ("Price: " + subscription.getMembershipPlan().getPrice());
+                    i++;
                 }
+                return returnString;
             }
 
-            // If the loop completes without finding the customer, print an error message
-            throw new IllegalArgumentException("Customer not found with ID: " + customerId);
-
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
         }
+        return "Customer Not Found";
     }
 
-    public static void displayCustomersSubscribedInDay(int day,int month, int year) {
-        try {
-            System.out.println("Customers Subscribed in " + month + "/" + year + ":");
+    public static String displayCustomersSubscribedInDay(int day,int month, int year) {
+        String returnString = "";
+            returnString += ("Customers Subscribed in " + month + "/" + year + ":");
 
             for (Customer customer : Gym.gym.customers) {
                 MembershipPlan customerMembership = customer.getSubscription().getMembershipPlan();
@@ -201,21 +229,19 @@ public class Admin {
 
                     // Check if the subscription starts in the specified month and year
                     if (subscriptionMonth == month && subscriptionYear == year && subscriptionDay == day) {
-                        System.out.println("Customer ID: " + customer.getId());
-                        System.out.println("Customer Name: " + customer.getName());
-                        System.out.println("Customer Phone Number: " + customer.getPhoneNumber());
-                        System.out.println(); // Add a line break for better readability
+                        returnString += ("\nCustomer ID: " + customer.getId());
+                        returnString += (", Customer Name: " + customer.getName());
+                        returnString += (", Customer Phone Number: " + customer.getPhoneNumber());
                     }
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
+        if (returnString.equals(("Customers Subscribed in " + month + "/" + year + ":"))) returnString =  "No Customers Found";
+        return returnString;
+    }//TODO ADD THESE
 
-    public static void displayCustomersSubscribedInMonth(int month, int year) {
-        try {
-            System.out.println("Customers Subscribed in " + month + "/" + year + ":");
+    public static String displayCustomersSubscribedInMonth(int month, int year) {
+        String returnString = "";
+            returnString += ("Customers Subscribed in " + month + "/" + year + ":");
 
             for (Customer customer : Gym.gym.customers) {
                 MembershipPlan customerMembership = customer.getSubscription().getMembershipPlan();
@@ -226,64 +252,51 @@ public class Admin {
 
                     // Check if the subscription starts in the specified month and year
                     if (subscriptionMonth == month && subscriptionYear == year) {
-                        System.out.println("Customer ID: " + customer.getId());
-                        System.out.println("Customer Name: " + customer.getName());
-                        System.out.println("Customer Phone Number: " + customer.getPhoneNumber());
-                        System.out.println(); // Add a line break for better readability
+                        returnString += ("\nCustomer ID: " + customer.getId());
+                        returnString += (", Customer Name: " + customer.getName());
+                        returnString += (", Customer Phone Number: " + customer.getPhoneNumber());
                     }
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+            if (returnString.equals(("Customers Subscribed in " + month + "/" + year + ":"))) returnString = "No Customers Found";
+            return returnString;
     }
 
-    public static void displayCustomersOfCoach(int coachId) {
-        try {
-            System.out.println("Customers of Coach with ID " + coachId + ":");
-            boolean coachFound = false;
+    public static String displayCustomersOfCoach(int coachId) {
+        String returnString = "";
+
             for (Coach coach : Gym.gym.coaches) {
                 if (coach.getId() == coachId) {
-                    coachFound = true;
+                    returnString += ("Customers of Coach with ID " + coachId + ":");
+                    if (coach.getCustomers().isEmpty()) return "No Customers";
                     for (Customer customer : Gym.gym.customers) {
                         if (customer.getSubscription().getAssignedCoachId() == coachId) {
-                            System.out.println("Customer ID: " + customer.getId());
-                            System.out.println("Customer Name: " + customer.getName());
-                            System.out.println("Customer Phone Number: " + customer.getPhoneNumber());
-                            System.out.println(); // Add a line break for better readability
+                            returnString += ("\nCustomer ID: " + customer.getId());
+                            returnString += ("\nCustomer Name: " + customer.getName());
+                            returnString += ("\nCustomer Phone Number: " + customer.getPhoneNumber());
                         }
                     }
-                    break;
+                    return returnString;
                 }
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        return "Coach Not Found";
     }
 
-    public static double displayIncomeInMonth(int month, int year) {
-        try {
-            System.out.println("GYM Income for " + month + " " + year + ":");
+    public static double displayIncomeInMonth(LocalDate date) {
+        double totalIncome = 0.0;
 
-            double totalIncome = 0.0;
+        for (Subscription subscription : Gym.gym.subscriptions) {
+            LocalDate startDate = subscription.getMembershipPlan().getStartDate();
+            LocalDate endDate = startDate.plusMonths(subscription.getMembershipPlan().getNumberOfMonths());
 
-            for (Subscription subscription : Gym.gym.subscriptions) {
-                LocalDate startDate = subscription.getMembershipPlan().getStartDate();
-                int monthValue = startDate.getMonthValue();
-                int yearValue = startDate.getYear();
-                // Check if the subscription falls within the specified month and year
-                if (monthValue == month && yearValue == year) {
-                    // Calculate the income for the subscription
-                    double subscriptionIncome = subscription.getMembershipPlan().getPrice();
-                    totalIncome += subscriptionIncome;
-                }
+            // Check if the subscription falls within the specified month and year
+            if (endDate.isAfter(date)) {
+                // Calculate the income for the subscription
+                double subscriptionIncome = subscription.getMembershipPlan().getPrice();
+                totalIncome += subscriptionIncome;
             }
-            System.out.println("Total Income: " + totalIncome);
-            return totalIncome;
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            return -1;
         }
+        return totalIncome;
     }
 
     public static String SortCoachesByCustomers(List<Coach> coaches) {
@@ -300,7 +313,7 @@ public class Admin {
             } catch (NullPointerException e) {
                 customers = "0";
             }
-            returnString += "Name: " + coach.getName() + " ID: " + coach.getId() + " Customers: " + customers + "\n";
+            returnString += "Name: " + coach.getName() + ", ID: " + coach.getId() + ", Customers: " + customers + "\n";
         }
         return returnString;
     }
@@ -324,8 +337,8 @@ class SortByCustomers implements Comparator<Coach> {
             o2Size = o2.getCustomers().size();
         }
 
-        if (o1Size > o2Size) return 1;
-        else if (o1Size < o2Size) return -1;
+        if (o1Size < o2Size) return 1;
+        else if (o1Size > o2Size) return -1;
         else return 0;
     }
 }
