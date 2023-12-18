@@ -29,7 +29,7 @@ public class Admin {
         Gym.gym.sportsEquipments.add(newEquipment);
     }
 
-    public static String deleteCustomer(int customerID) {//TODO CHANGE THIS!!
+    public static String deleteCustomer(int customerID) {
         Customer customerToBeDeleted = null;
         Coach coachWithCustomer = null;
         for (Customer customer : Gym.gym.customers){
@@ -234,7 +234,7 @@ public class Admin {
             }
         if (returnString.equals(("Customers Subscribed in " + month + "/" + year + ":"))) returnString =  "No Customers Found";
         return returnString;
-    }//TODO ADD THESE
+    }
 
     public static String displayCustomersSubscribedInMonth(int month, int year) {
         String returnString = "";

@@ -1046,7 +1046,7 @@ public class GUIPage extends JFrame implements ActionListener {
                             mainTextArea.setText("Invalid Subscription Details");
                         }
                     }
-                });//TODO FINISH THIS
+                });
 
                 editCustomerDetails.addActionListener(new ActionListener() {
                     @Override

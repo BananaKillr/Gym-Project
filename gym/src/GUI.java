@@ -8,7 +8,7 @@ public class GUI {
     private JPanel ParentPanel;
     private JPanel MainPage;
     private JButton coachLoginButton;
-    private JButton coachRegistrationButton; //TODO Add registration for coach & customer
+    private JButton coachRegistrationButton;
     private JButton adminLoginButton;
     private JButton customerRegistrationButton;
     private JButton customerLoginButton;
