@@ -46,7 +46,6 @@ public class Admin {
             }
         }
 
-        Gym.gym.subscriptions.remove(customerToBeDeleted.getSubscription());
         Gym.gym.customers.remove(customerToBeDeleted);
         coachWithCustomer.getCustomers().remove(customerToBeDeleted);
         return "Customer Deleted Successfully";
