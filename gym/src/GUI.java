@@ -135,6 +135,24 @@ public class GUI {
                 }
             }
         });
+        customerRegistrationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(ParentPanel);
+                mainFrame.dispose();
+                GUIPage gui = new GUIPage();
+                gui.customerRegistration();
+            }
+        });
+        coachRegistrationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(ParentPanel);
+                mainFrame.dispose();
+                GUIPage gui = new GUIPage();
+                gui.coachRegistration();
+            }
+        });
     }
 
     public static void main(String[] args) {

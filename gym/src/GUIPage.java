@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 
 public class GUIPage extends JFrame implements ActionListener {
 
@@ -1227,6 +1226,244 @@ public class GUIPage extends JFrame implements ActionListener {
                         mainTextArea.setText(textAreaOutput);
                     }
                 });
+            }
+        });
+    }
+
+    public void coachRegistration(){
+        ResetPanels();
+        int coachID;
+        try {
+            coachID = (Gym.gym.coaches.getLast().getId() + 1);
+        }
+        catch (Exception exception){
+            coachID = 1;
+        }
+        JTextField coachName = new JTextField();
+        String[] selection = {"M", "F"};
+        JComboBox coachGender = new JComboBox(selection);
+        JTextField coachAddress = new JTextField();
+        JTextField coachPhoneNum = new JTextField();
+        JTextField coachEmail = new JTextField();
+        JTextField coachMaxHours = new JTextField();
+        JPasswordField coachPassword = new JPasswordField();
+        JButton getInput = new JButton("Register");
+        JTextField adminUsername = new JTextField();
+        JPasswordField adminPassword = new JPasswordField();
+        JButton back = new JButton("Return");
+
+        ResetMainArea();
+        ResetTextArea();
+
+
+        topPanel.add(new JLabel("Admin Username: ", SwingConstants.RIGHT));
+        topPanel.add(adminUsername);
+        topPanel.add(new JLabel("Admin Username", SwingConstants.RIGHT));
+        topPanel.add(adminPassword);
+        topPanel.add(new JLabel());
+        topPanel.add(new JLabel());
+
+        AddPanelsToMain(1);
+        mainArea.add(new JLabel("Enter ID:"));
+        mainArea.add(new JLabel(Integer.toString(coachID)));
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Enter Name:"));
+        mainArea.add(coachName);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Address:"));
+        mainArea.add(coachAddress);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Select Gender:"));
+        mainArea.add(coachGender);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Enter Phone Number:"));
+        mainArea.add(coachPhoneNum);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Enter Email:"));
+        mainArea.add(coachEmail);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Enter Max Working Hours:"));
+        mainArea.add(coachMaxHours);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Password"));
+        mainArea.add(coachPassword);
+        AddPanelsToMain(2);
+        mainArea.add(getInput);
+        mainArea.add(back);
+        AddPanelsToMain(1+3*4);
+
+        int finalCoachID = coachID;
+        getInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResetTextArea();
+                char gender = 'M';
+                if (coachGender.getSelectedIndex() == 1) gender = 'F';
+                try{
+                    if (Gym.gym.AdminLogin(adminUsername.getText(), adminPassword.getPassword())){
+                        try{
+                            Coach coach = new Coach(finalCoachID, coachName.getText(),
+                                    gender, coachAddress.getText(), coachPhoneNum.getText(), coachEmail.getText(),
+                                    Integer.parseInt(coachMaxHours.getText()), coachPassword.getPassword());
+                            Admin.addCoach(coach);
+                            textAreaOutput = "Registration Complete";
+                            GUI.main(new String[]{});
+                            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(sidebar);
+                            frame.dispose();
+                        } catch (Exception exception){
+                            textAreaOutput = "Invalid Inputs";
+                        }
+                    }
+                    else textAreaOutput = "Wrong Admin Password";
+                }
+                catch (Exception exception){
+                    textAreaOutput = "Invalid Admin Details";
+                }
+
+                mainTextArea.setText(textAreaOutput);
+            }
+        });
+
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUI.main(new String[]{});
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(sidebar);
+                frame.dispose();
+            }
+        });
+
+        mainArea.revalidate();
+        mainArea.repaint();
+    }
+
+    public void customerRegistration(){
+        ResetMainArea();
+        ResetTextArea();
+
+        JTextField adminUsername = new JTextField();
+        JPasswordField adminPassword = new JPasswordField();
+        JButton back = new JButton("Return");
+        JButton getInput = new JButton("Add Customer");
+        // Plan and Subscription
+        JTextField coachID = new JTextField();
+        JTextField numberOfMonths = new JTextField();
+        String[] planSelection = {"3 Days per Week", "6 Days per Week"};
+        JComboBox membershipPlan = new JComboBox<>(planSelection);
+
+        //Customer Details
+        JTextField customerName = new JTextField();
+        String[] genderSelection = {"M", "F"};
+        JComboBox customerGender = new JComboBox(genderSelection);
+        JTextField customerAddress = new JTextField();
+        JTextField customerEmail = new JTextField();
+        JTextField customerPhoneNum = new JTextField();
+        JPasswordField customerPassword = new JPasswordField();
+        int intCustomerID;
+        try{
+            intCustomerID = Gym.gym.customers.getLast().getId() + 1;
+        }
+        catch (Exception exception){
+            intCustomerID = 1;
+        }
+
+        topPanel.add(new JLabel("Admin Username: ", SwingConstants.RIGHT));
+        topPanel.add(adminUsername);
+        topPanel.add(new JLabel("Admin Username", SwingConstants.RIGHT));
+        topPanel.add(adminPassword);
+        topPanel.add(new JLabel());
+        topPanel.add(new JLabel());
+
+        AddPanelsToMain(1);
+        mainArea.add(new JLabel("Customer ID:"));
+        mainArea.add(new JLabel(Integer.toString(intCustomerID)));
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Customer Name: "));
+        mainArea.add(customerName);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Gender:"));
+        mainArea.add(customerGender);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Address: "));
+        mainArea.add(customerAddress);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Email"));
+        mainArea.add(customerEmail);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Phone Number: "));
+        mainArea.add(customerPhoneNum);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Password"));
+        mainArea.add(customerPassword);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Coach ID:"));
+        mainArea.add(coachID);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Plan Type: "));
+        mainArea.add(membershipPlan);
+        AddPanelsToMain(2);
+        mainArea.add(new JLabel("Number of Months: "));
+        mainArea.add(numberOfMonths);
+        AddPanelsToMain(2);
+        mainArea.add(getInput);
+        mainArea.add(back);
+        AddPanelsToMain(5);
+
+        mainArea.revalidate();
+        mainArea.repaint();
+
+        int finalIntCustomerID = intCustomerID;
+        getInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    if (Gym.gym.AdminLogin(adminUsername.getText(), adminPassword.getPassword())){
+                        try {//Creating Membership
+                            PlanType planType = PlanType.THREE_DAYS_PER_WEEK;
+                            if (membershipPlan.getSelectedIndex() == 1) planType = PlanType.SIX_DAYS_PER_WEEK;
+                            MembershipPlan customerMembership = new MembershipPlan(LocalDate.now(), planType,
+                                    Integer.parseInt(numberOfMonths.getText()));
+
+                            try {//Creating Subscription
+                                Subscription subscription = new Subscription(finalIntCustomerID, Integer.parseInt(coachID.getText()),
+                                        customerMembership);
+                                try {
+                                    char gender = 'M';
+                                    if (customerGender.getSelectedIndex() == 1) gender = 'F';
+                                    Customer newCustomer = new Customer(finalIntCustomerID, customerName.getText(), gender, customerAddress.getText(),
+                                            customerPhoneNum.getText(), customerEmail.getText(), customerPassword.getPassword());
+                                    newCustomer.setSubscription(subscription);
+                                    mainTextArea.setText(Admin.addCustomer(newCustomer));
+                                    GUI.main(new String[]{});
+                                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(sidebar);
+                                    frame.dispose();
+                                }
+                                catch (Exception exception){
+                                    mainTextArea.setText("Invalid Customer Details");
+                                }
+                            }
+                            catch (Exception exception){
+                                mainTextArea.setText("Invalid Subscription");
+                            }
+                        }
+                        catch (Exception exception) {
+                            mainTextArea.setText("Invalid Membership");
+                        }
+                    }
+                    else mainTextArea.setText("Wrong Admin Password");
+                }
+                catch (Exception exception){
+                    mainTextArea.setText("Invalid Admin Password");
+                }
+            }
+        });
+
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUI.main(new String[]{});
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(sidebar);
+                frame.dispose();
             }
         });
     }

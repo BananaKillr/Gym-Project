@@ -1,7 +1,6 @@
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Coach extends Person implements Serializable {
