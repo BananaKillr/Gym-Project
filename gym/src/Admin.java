@@ -288,7 +288,7 @@ public class Admin {
             LocalDate endDate = startDate.plusMonths(subscription.getMembershipPlan().getNumberOfMonths());
 
             // Check if the subscription falls within the specified month and year
-            if (endDate.isAfter(date)) {
+            if (endDate.isAfter(date) && date.isAfter(startDate)) {
                 // Calculate the income for the subscription
                 double subscriptionIncome = subscription.getMembershipPlan().getPrice();
                 totalIncome += subscriptionIncome;
