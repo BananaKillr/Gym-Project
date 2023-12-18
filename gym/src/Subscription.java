@@ -42,4 +42,9 @@ public class Subscription implements Serializable {
         this.membershipPlan = membershipPlan;
     }
 
+    public boolean equals(Subscription sub1, Subscription sub2){
+        return sub1.assignedCoachId == sub2.assignedCoachId &&
+                sub1.membershipPlan.equals(sub2.membershipPlan) &&
+                sub1.customerId == sub2.customerId;
+    }
 }

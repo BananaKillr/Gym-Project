@@ -9,10 +9,10 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-////    Creating Example gym & Saving data to file
-//        Gym gym = new Gym("X Gym", "123 Main St", "555-1234");
-//
-////        New Customers
+//    Creating Example gym & Saving data to file
+        Gym gym = new Gym("X Gym", "123 Main St", "555-1234");
+
+//        New Customers
 //        InBody B = new InBody(LocalDate.now(), 180.0, 80.0, 50, 20, 20, 20);
 //        ArrayList<InBody> BB = new ArrayList<>();
 //        BB.add(B);
@@ -34,8 +34,8 @@ public class Main {
 //        gym.setSubscriptions(subscriptions);
 //
 //        // Setting up Equipment and Coach objects
-//        Equipment treadmill = new Equipment("Treadmill", 301, 5);
-//        Equipment rowingMachine = new Equipment("Rowing Machine", 302, 3);
+//        Equipment treadmill = new Equipment("Treadmill", 1, 5);
+//        Equipment rowingMachine = new Equipment("Rowing Machine", 1, 3);
 //        ArrayList<Equipment> gymEquipment = new ArrayList<Equipment>();
 //        gymEquipment.add(treadmill);
 //        gymEquipment.add(rowingMachine);

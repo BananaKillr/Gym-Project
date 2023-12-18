@@ -69,4 +69,10 @@ public class MembershipPlan implements Serializable {
         price = discountedPrice * numberOfMonths;
         return price;
     }
+
+    public boolean equals(MembershipPlan membership1, MembershipPlan membership2){
+        return membership1.startDate.isEqual(membership2.startDate) &&
+                membership1.planType == membership2.planType &&
+                membership1.numberOfMonths == membership2.numberOfMonths;
+    }
 }

@@ -10,15 +10,15 @@ public class Admin {
         Gym.gym.customers.add(newCustomer);
     }
 
-    public void addCoach(Coach newCoach) {
+    public static void addCoach(Coach newCoach) {
         Gym.gym.coaches.add(newCoach);
     }
 
-    public void addEquipment(Equipment newEquipment) {
+    public static void addEquipment(Equipment newEquipment) {
         Gym.gym.sportsEquipments.add(newEquipment);
     }
 
-    public void deleteCustomer(int customerID) {
+    public static void deleteCustomer(int customerID) {
         try {
             int index = -1;
             for (int i = 0; i < Gym.gym.customers.size(); i++) {
@@ -39,7 +39,7 @@ public class Admin {
         }
     }
 
-    public void deleteCoach(int coachID) {
+    public static void deleteCoach(int coachID) {
         try {
             int index = -1;
             for (int i = 0; i < Gym.gym.coaches.size(); i++) {
@@ -60,7 +60,7 @@ public class Admin {
         }
     }
 
-    public void deleteEquipment(int equipmentCode) {
+    public static void deleteEquipment(int equipmentCode) {
         try {
             int index = -1;
             for (int i = 0; i < Gym.gym.sportsEquipments.size(); i++) {
@@ -81,7 +81,7 @@ public class Admin {
         }
     }
 
-    public void editCustomer(int customerId, Customer newCustomer) {
+    public static void editCustomer(int customerId, Customer newCustomer) {
         try {
             boolean customerFound = false;
 
@@ -106,7 +106,7 @@ public class Admin {
         }
     }
 
-    public void editCoach(int coachId, Coach newCoach) {
+    public static void editCoach(int coachId, Coach newCoach) {
         try {
             boolean coachFound = false;
 
@@ -131,7 +131,7 @@ public class Admin {
         }
     }
 
-    public void editEquipment(int equipmentCode, Equipment newEquipment) {
+    public static void editEquipment(int equipmentCode, Equipment newEquipment) {
         try {
             boolean equipmentFound = false;
 
@@ -156,7 +156,7 @@ public class Admin {
         }
     }
 
-    public void displaySubscriptionHistory(int customerId) {
+    public static void displaySubscriptionHistory(int customerId) {
         try {
             System.out.println("Subscription history for Customer with ID " + customerId + ":");
 
@@ -187,7 +187,7 @@ public class Admin {
         }
     }
 
-    public void displayCustomersSubscribedInDay(int day,int month, int year) {
+    public static void displayCustomersSubscribedInDay(int day,int month, int year) {
         try {
             System.out.println("Customers Subscribed in " + month + "/" + year + ":");
 
@@ -213,7 +213,7 @@ public class Admin {
         }
     }
 
-    public void displayCustomersSubscribedInMonth(int month, int year) {
+    public static void displayCustomersSubscribedInMonth(int month, int year) {
         try {
             System.out.println("Customers Subscribed in " + month + "/" + year + ":");
 
@@ -238,7 +238,7 @@ public class Admin {
         }
     }
 
-    public void displayCustomersOfCoach(int coachId) {
+    public static void displayCustomersOfCoach(int coachId) {
         try {
             System.out.println("Customers of Coach with ID " + coachId + ":");
             boolean coachFound = false;
@@ -261,7 +261,7 @@ public class Admin {
         }
     }
 
-    public double displayIncomeInMonth(int month, int year) {
+    public static double displayIncomeInMonth(int month, int year) {
         try {
             System.out.println("GYM Income for " + month + " " + year + ":");
 
@@ -286,7 +286,7 @@ public class Admin {
         }
     }
 
-    public String SortCoachesByCustomers(List<Coach> coaches) {
+    public static String SortCoachesByCustomers(List<Coach> coaches) {
         //Making a copy of coaches
         List<Coach> sortedList = new ArrayList<Coach>(Gym.gym.coaches.size());
         sortedList.addAll(Gym.gym.coaches);
