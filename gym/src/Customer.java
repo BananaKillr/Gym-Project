@@ -42,10 +42,10 @@ public class Customer extends Person implements Serializable {
         }
         else {
             LocalDate currentDate = LocalDate.now();
-            InBody lastInbody = inBodyInfo.get((inBodyInfo.size() - 1));
+            InBody lastInbody = inBodyInfo.getLast();
             LocalDate LastTime = lastInbody.getDateOfInBody();
             long difference = ChronoUnit.DAYS.between(currentDate, LastTime);
-            return difference < 30;
+            return difference > 30;
         }
     }
 
@@ -62,7 +62,6 @@ public class Customer extends Person implements Serializable {
         }
         return  returnString;
     }
-
     public String displayMembershipDetails() {
         String tempString = "";
         MembershipPlan myMembership = subscription.getMembershipPlan();
@@ -75,18 +74,39 @@ public class Customer extends Person implements Serializable {
     }
     public String displayInBodyInfoAtDate(LocalDate specificDate) {
         String returnString = "";
-        for (InBody inBody : inBodyInfo) {
-            if (inBody.getDateOfInBody().equals(specificDate)) {
-                returnString += ("Height: " + inBody.getHeight()) + "\n";
-                returnString += ("Total Weight: " + inBody.getTotalWeight()) + "\n";
-                returnString += ("Body Fat Mass: " + inBody.getBodyFatMass()) + "\n";
-                returnString += ("Minerals: " + inBody.getMinerals()) + "\n";
-                returnString += ("Total Body Water: " + inBody.getTotalBodyWater() + "\n");
-                returnString += ("Protein: " + inBody.getProtein()) + "\n";
+        for (int i = inBodyInfo.size() - 1 ; i >= 0; i--){
+            InBody inbody = inBodyInfo.get(i);
+            LocalDate date = inbody.getDateOfInBody();
+
+            if (inBodyInfo.isEmpty()) {
+                returnString = "No In Bodies";
+            }
+            else if (inbody.getDateOfInBody().isBefore(specificDate) || inbody.getDateOfInBody().isEqual(specificDate)){
+                returnString += "Date: " + inbody.getDateOfInBody().toString() + "\n";
+                returnString += ("Height: " + inbody.getHeight()) + "\n";
+                returnString += ("Total Weight: " + inbody.getTotalWeight()) + "\n";
+                returnString += ("Body Fat Mass: " + inbody.getBodyFatMass()) + "\n";
+                returnString += ("Minerals: " + inbody.getMinerals()) + "\n";
+                returnString += ("Total Body Water: " + inbody.getTotalBodyWater() + "\n");
+                returnString += ("Protein: " + inbody.getProtein()) + "\n";
                 break;
             }
-            else returnString = "No information found";
+            else {
+                returnString = "No In Bodies Before Date";
+            }
         }
+//        for (InBody inBody : inBodyInfo) {
+//            if (inBody.getDateOfInBody().equals(specificDate)) {
+//                returnString += ("Height: " + inBody.getHeight()) + "\n";
+//                returnString += ("Total Weight: " + inBody.getTotalWeight()) + "\n";
+//                returnString += ("Body Fat Mass: " + inBody.getBodyFatMass()) + "\n";
+//                returnString += ("Minerals: " + inBody.getMinerals()) + "\n";
+//                returnString += ("Total Body Water: " + inBody.getTotalBodyWater() + "\n");
+//                returnString += ("Protein: " + inBody.getProtein()) + "\n";
+//                break;
+//            }
+//            else returnString = "No information found";
+//        }
         return returnString;
     }
 
@@ -127,7 +147,8 @@ public class Customer extends Person implements Serializable {
     public List<Subscription> getOldSubscription() {
         return oldSubscription;
     }
-    public String updateSubscription(Subscription newSubscription) {
+
+    public void updateSubscription(Subscription newSubscription) {
         String result = "";
         try {
             oldSubscription.add(subscription);
@@ -138,7 +159,6 @@ public class Customer extends Person implements Serializable {
         } catch (Exception e) {
             result += ("Error: " + e.getMessage());
         }
-        return result;
     }
 
     public void deleteLastInBody(){

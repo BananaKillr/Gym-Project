@@ -1,14 +1,12 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.time.LocalDate;
 //gym and admin
 public class Gym implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    static Gym gym;
     // Attributes
     private String name;
     private String address;
@@ -17,15 +15,10 @@ public class Gym implements Serializable {
     protected List<Coach> coaches = new ArrayList<>();
     protected List<Customer> customers = new ArrayList<>();
     protected List<Subscription> subscriptions = new ArrayList<>();
-    private static final String ADMIN_NAME = "admin";
-    private static final char[] ADMIN_PASSWORD = {'a','d','m','i','n'};
-    Person currentPerson;
-    static int customerIDCounter;
-    static int coachIDCounter;
-
-    public Gym(){
-
-    }
+    private final String ADMIN_NAME = "admin";
+    private final char[] ADMIN_PASSWORD = {'a','d','m','i','n'};
+    Person currentPerson; // Person currently logged in
+    public static Gym gym; // Gym that is currently loaded
 
     public Gym(String name, String address, String phoneNumber) {
         this.name = name;
@@ -248,27 +241,45 @@ public class Gym implements Serializable {
         }
     }
 
+    public static void saveData(String fileName) { //Saves data to file
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            oos.writeObject(gym);
+            System.out.println("Data saved");
+        } catch (Exception e) {
+            System.out.println("Saving error");;
+        }
+    }
+
     public static void saveData() { //Saves data to file called data.ser
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.ser"))) {
             oos.writeObject(gym);
-            System.out.println("Serialization complete.");
+            System.out.println("Data saved");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Saving error");;
         }
     }
-    public static Gym getDataFromFile(){ //puts data in the static Gym object, then returns the handle
+    public static Gym getDataFromFile(String fileName){ //puts data in the static Gym object, then returns the handle
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
+            Gym.gym = (Gym) ois.readObject();
+            System.out.println("Data read successfully");
+        } catch (Exception e) {
+            System.out.println("Read error");
+        }
+        return gym;
+    }
+
+    public static Gym getDataFromFile(){
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data.ser"))) {
             Gym.gym = (Gym) ois.readObject();
-            System.out.println("Deserialization complete.");
+            System.out.println("Data read successfully");
         } catch (Exception e) {
-            System.out.println("Error");
+            System.out.println("Read error");
         }
         return gym;
     }
 
     public boolean AdminLogin(String username, char[] password){
-        if (username.equals(Gym.ADMIN_NAME) && Arrays.equals(password, Gym.ADMIN_PASSWORD)) return true;
-        return false;
+        return username.equals(this.ADMIN_NAME) && Arrays.equals(password, this.ADMIN_PASSWORD);
     }
 
     public boolean CustomerLogin(String email, char[] password){

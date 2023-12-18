@@ -137,19 +137,22 @@ public class GUI {
 
     public static void main(String[] args) {
         //Loading GUI
-        JFrame frame = new JFrame("X Gym");
-        frame.setContentPane(new GUI().ParentPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+//        JFrame frame = new JFrame("X Gym");
+//        frame.setContentPane(new GUI().ParentPanel);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.pack();
+//        frame.setVisible(true);
 
-        //Creating an example gym
-        Gym.getDataFromFile();
+        //Reading gym data from file
+        Gym.setGym(Gym.getDataFromFile());
         Gym gym = Gym.gym;
 
-        //For testing
-//        gym.currentPerson = gym.customers.get(0);
-//        GUIPage guiPage = new GUIPage();
-//        guiPage.CustomerPage();
+        //To create a custom gym use constructor
+        //To make program use that gym object, use Gym.setGym
+        //To save the gym currently in use run Gym.saveData
+        //By default data is read from to written to "data.ser"
+
+        GUIPage gui = new GUIPage();
+        gui.AdminPage();
     }
 }
