@@ -127,13 +127,13 @@ public class Admin {
         if (newCoach == null) return "Coach Not Found";
         Gym gym = Gym.gym;
         //Setting New Subscription
+        Gym.gym.subscriptions.remove(customerToBeEdited.getSubscription());
         customerToBeEdited.updateSubscription(newSubscription);
 
         //Updating coaches' customer lists
         oldCoach.getCustomers().remove(customerToBeEdited);
         newCoach.getCustomers().add(customerToBeEdited);
 
-        Gym.gym.subscriptions.remove(customerToBeEdited.getSubscription());
         Gym.gym.subscriptions.add(newSubscription);
 
         return "Subscription Edited Successfully";

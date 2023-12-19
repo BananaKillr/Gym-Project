@@ -78,14 +78,15 @@ public class Customer extends Person implements Serializable {
     }
     public String displayInBodyInfoAtDate(LocalDate specificDate) {
         String returnString = "";
+        if (inBodyInfo.isEmpty()) {
+            returnString = "No In Bodies";
+        }
         for (int i = inBodyInfo.size() - 1 ; i >= 0; i--){
             InBody inbody = inBodyInfo.get(i);
             LocalDate date = inbody.getDateOfInBody();
 
-            if (inBodyInfo.isEmpty()) {
-                returnString = "No In Bodies";
-            }
-            else if (inbody.getDateOfInBody().isBefore(specificDate) || inbody.getDateOfInBody().isEqual(specificDate)){
+
+            if (inbody.getDateOfInBody().isBefore(specificDate) || inbody.getDateOfInBody().isEqual(specificDate)){
                 returnString += "Date: " + inbody.getDateOfInBody().toString() + "\n";
                 returnString += ("Height: " + inbody.getHeight()) + "\n";
                 returnString += ("Total Weight: " + inbody.getTotalWeight()) + "\n";
@@ -111,6 +112,7 @@ public class Customer extends Person implements Serializable {
 //            }
 //            else returnString = "No information found";
 //        }
+
         return returnString;
     }
 

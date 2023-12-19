@@ -391,7 +391,7 @@ public class GUIPage extends JFrame implements ActionListener {
                 mainArea.repaint();
                 mainArea.revalidate();
 
-                JButton getInput = new JButton("Get Customer Details");
+                JButton getInput = new JButton("Enter Customer Name");
                 JTextField customerName = new JTextField();
 
                 AddPanelsToMain(1);

@@ -612,7 +612,7 @@
                   <enabled value="true"/>
                   <font size="36" style="1"/>
                   <foreground color="-256"/>
-                  <text value="Your guidance turns dreams into achievements.&quot;  "/>
+                  <text value="Your guidance turns dreams into achievements."/>
                 </properties>
               </component>
               <component id="b9d17" class="javax.swing.JLabel">

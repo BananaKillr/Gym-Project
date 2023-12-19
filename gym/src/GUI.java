@@ -171,6 +171,7 @@ public class GUI {
         frame.pack();
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
+
         Gym.getDataFromFile();
 
         //To create a custom gym use constructor
